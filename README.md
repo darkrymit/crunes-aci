@@ -28,15 +28,30 @@ Run `/reload-plugins` to activate in the current session.
 
 Copy or reference the skills from the `skills/` directory. As long as your tool supports invoking CLI commands, the skills work against `crunes` directly.
 
-## Usage in Claude Code
+## Skills
 
-With the plugin active, use the included skills to interact with runes:
+| Skill | Use when |
+|---|---|
+| `crunes-help` | Orienting in a project, querying rune or utils API docs, troubleshooting |
+| `crunes-use-rune` | Discovering and fetching rune output, understanding `$token` syntax |
+| `crunes-write-rune` | Creating or editing a rune, using `@utils` helpers |
+| `crunes-use-plugin` | Installing plugins, enabling/disabling per-project |
+| `crunes-write-plugin` | Scaffolding and publishing a plugin |
 
-- **crunes-list** — discover what runes are available in the current project
-- **crunes-use** — fetch rune output mid-conversation
-- **crunes-create** — scaffold a new rune
+### Key commands
 
-Additionally, the `UserPromptSubmit` hook automatically resolves `$key[=args]` tokens and injects rune output as XML context before Claude sees your prompt:
+```bash
+crunes list                            # what runes exist in this project
+crunes help rune <key>                 # args schema + examples for a rune
+crunes help utils                      # list all utils.* namespaces
+crunes help utils <ns>                 # function signatures for one namespace (e.g. ws, fs, cache)
+crunes help utils <ns> --format json   # machine-readable, for code generation
+crunes doctor                          # verify environment health
+```
+
+## Automatic context injection (Claude Code)
+
+The `UserPromptSubmit` hook automatically resolves `$key[=args]` tokens and injects rune output as XML context before Claude sees your prompt:
 
 ```xml
 <context title="Setup Guide" id="setup">
@@ -45,6 +60,17 @@ Additionally, the `UserPromptSubmit` hook automatically resolves `$key[=args]` t
 2. npm install
 </context>
 ```
+
+Token syntax:
+
+| Token | Meaning |
+|---|---|
+| `$key` | All sections |
+| `$key(arg1,arg2)` | With positional args |
+| `$key::section1,section2` | Section filter |
+| `$key(arg1)::section` | Args + section filter |
+| `$my-plugin:rune-key` | Plugin rune |
+| `$my-plugin:rune-key(arg)::sec` | Plugin rune, args + section |
 
 ## Project Setup
 

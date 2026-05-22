@@ -33,7 +33,7 @@ crunes template use plugin-name:template-name     # from a specific plugin
 Rune files are ESM modules. All I/O goes through `@utils` — no Node.js builtins.
 
 ```js
-import { fs, md, tree, section, env, rune, fetch, cache, shell, json, archive } from '@utils'
+import { fs, md, tree, section, env, vars, rune, fetch, ws, json, yaml, xml, shell, cache, sqlite, archive, crypto } from '@utils'
 
 // Optional: declare the args schema
 export async function args(b) {
@@ -61,19 +61,35 @@ If `args()` is omitted, `args._` contains the raw positional strings passed to t
 
 ## `@utils` reference
 
+For full function signatures, parameter types, and return-object method lists, run:
+
+```bash
+crunes help utils                      # all namespaces
+crunes help utils <ns>                 # one namespace (e.g. ws, fs, cache)
+crunes help utils <ns> --format json   # machine-readable
+```
+
+Quick reference:
+
 | Import | Key methods |
 |---|---|
-| `fs` | `fs.read(path, { throw: false })` · `fs.exists(path)` · `fs.glob(pattern, { onlyDirectories })` · `fs.readDir(path)` |
-| `md` | `md.h1/h2/h3(text)` · `md.bold(text)` · `md.code(text)` · `md.ul(items)` · `md.ol(items)` · `md.p(text)` · `md.table(headers, rows)` · `md.fence(code, lang)` |
-| `tree` | `tree.node(name, description, children[])` |
+| `fs` | `fs.read(path, opts?)` · `fs.write(path, content)` · `fs.exists(path)` · `fs.glob(pattern, opts?)` · `fs.copy(src, dest)` · `fs.replace(path, regex, replacement)` · `fs.cwd()` |
+| `md` | `md.h1/h2/h3(text)` · `md.bold(text)` · `md.italic(text)` · `md.code(text)` · `md.codeBlock(text, lang?)` · `md.ul(items)` · `md.ol(items)` · `md.p(text)` · `md.table(headers, rows)` · `md.link(text, url)` |
+| `tree` | `tree.node(name, description, children?)` · `tree.format(root, { style? })` |
 | `section` | `section.create(name, data, { title, attrs })` |
-| `env` | `env.get(key)` — returns `null` if not set |
+| `env` | `env.get(key, fallback?)` · `env.has(key)` |
+| `vars` | `vars.get(key, fallback?)` · `vars.has(key)` — reads rune config vars |
 | `rune` | `rune.use(key, args[])` — call another rune from within this rune |
-| `fetch` | `fetch.get(url)` · `fetch.post(url, body)` |
-| `cache` | `cache.get(key)` · `cache.set(key, value, ttlMs)` — per-project cache |
-| `shell` | `shell.exec(cmd, args[])` — run shell commands |
-| `json` | `json.read(path)` · `json.write(path, data)` |
-| `archive` | `archive.read(zipPath, entryPath)` |
+| `fetch` | `fetch(url, { method?, headers?, body?, timeout? })` — returns `FetchResponse` with `.ok`, `.status`, `.text()`, `.json()` |
+| `ws` | `ws.client(url, opts?)` — returns `WsHandle` with `open()`, `send(msg)`, `close()`, `on(event, fn)` |
+| `json` | `json.read(path)` · `json.write(path, data)` · `json.get(path, jsonPath)` · `json.getAll(path, jsonPath)` · `json.modify(path, fn)` |
+| `yaml` | `yaml.read(path)` · `yaml.write(path, data)` · `yaml.modify(path, fn)` |
+| `xml` | `xml.read(path)` · `xml.write(path, data)` · `xml.modify(path, fn)` |
+| `shell` | `shell(cmd, { throw?, trim?, timeout?, env? })` — called directly as `utils.shell(cmd)` |
+| `cache` | `cache.open(location, name?)` — returns `CacheHandle` with `set(key, value, ttl?)`, `get(key)`, `delete(key)`, `clear()` |
+| `sqlite` | `sqlite.open(location, name?)` — returns `SqliteHandle` with `query/get/exec/transaction/close` |
+| `archive` | `archive.unzip(src, dest)` · `archive.zip(src, dest)` · `archive.untar(src, dest)` · `archive.tar(src, dest)` |
+| `crypto` | `crypto.uuid()` · `crypto.hex(size)` · `crypto.base64(size)` · `crypto.hash.hex(algo, data)` · `crypto.hash.base64(algo, data)` |
 
 All `fs` paths are relative to the project root (the directory containing `.crunes/`).
 
