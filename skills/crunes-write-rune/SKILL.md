@@ -64,9 +64,9 @@ If `args()` is omitted, `args._` contains the raw positional strings passed to t
 For full function signatures, parameter types, and return-object method lists, run:
 
 ```bash
-crunes help utils                      # all namespaces
-crunes help utils <ns>                 # one namespace (e.g. ws, fs, cache)
-crunes help utils <ns> --format json   # machine-readable
+crunes docs utils                      # all namespaces
+crunes docs utils <ns>                 # one namespace (e.g. ws, fs, cache)
+crunes docs utils <ns> --format json   # machine-readable
 ```
 
 Quick reference:
@@ -142,7 +142,7 @@ return null
 }
 ```
 
-`name` and `description` are shown in `crunes list` and `crunes help rune`. Edit them directly in config — no re-scaffolding needed.
+`name` and `description` are shown in `crunes list` and `crunes docs rune`. Edit them directly in config — no re-scaffolding needed.
 
 ## Test the rune
 

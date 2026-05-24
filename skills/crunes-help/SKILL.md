@@ -17,19 +17,19 @@ description: Use when orienting yourself in a crunes project — which skill to 
 ## Inspect a rune's API before calling it
 
 ```bash
-crunes help rune <key>                 # arg schema + examples
-crunes help rune <key> <key2>          # multiple runes
-crunes help rune <key> --format json   # JSON output
+crunes docs rune <key>                 # arg schema + examples
+crunes docs rune <key> <key2>          # multiple runes
+crunes docs rune <key> --format json   # JSON output
 ```
 
 ## Query utils.* API docs
 
 ```bash
-crunes help utils                      # list all 17 namespaces with one-line descriptions
-crunes help utils <ns>                 # full function signatures for one namespace
-crunes help utils <ns1> <ns2>          # multiple namespaces
-crunes help utils --format json        # machine-readable, all namespaces
-crunes help utils <ns> --format json   # machine-readable, one namespace
+crunes docs utils                      # list all 17 namespaces with one-line descriptions
+crunes docs utils <ns>                 # full function signatures for one namespace
+crunes docs utils <ns1> <ns2>          # multiple namespaces
+crunes docs utils --format json        # machine-readable, all namespaces
+crunes docs utils <ns> --format json   # machine-readable, one namespace
 ```
 
 Available namespaces: `archive` `cache` `crypto` `env` `fetch` `fs` `json` `md` `rune` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
@@ -60,6 +60,6 @@ Available on every `crunes` command:
 | Don't know what runes exist | `crunes list` |
 | Rune output looks wrong | `crunes -p use <key>` to see raw output; `crunes check <key>` to validate shape |
 | Command not found / unexpected error | `crunes doctor` |
-| Want to see a rune's args before calling | `crunes help rune <key>` |
+| Want to see a rune's args before calling | `crunes docs rune <key>` |
 | Need plain output for piping or AI context | Add `-p` global flag: `crunes -p use <key>` |
-| Don't know what `utils.ws` / `utils.fs` functions look like | `crunes help utils ws` or `crunes help utils ws --format json` |
+| Don't know what `utils.ws` / `utils.fs` functions look like | `crunes docs utils ws` or `crunes docs utils ws --format json` |

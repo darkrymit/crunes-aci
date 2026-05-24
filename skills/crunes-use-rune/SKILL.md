@@ -22,7 +22,7 @@ crunes -p list --format json      # JSON array
 ## Inspect a rune's args before calling
 
 ```bash
-crunes help rune <key>
+crunes docs rune <key>
 ```
 
 ## Run a rune — CLI syntax
@@ -69,4 +69,4 @@ Args inside `()` are comma-separated. Values containing spaces work naturally: `
 | Token already in the user's prompt | Hook resolves automatically — do nothing |
 | Need live context mid-conversation before planning or coding | `crunes -p use <key>` |
 | Want to inspect raw JSON structure | `crunes use --format json <key>` |
-| Unsure what args a rune accepts | `crunes help rune <key>` |
+| Unsure what args a rune accepts | `crunes docs rune <key>` |

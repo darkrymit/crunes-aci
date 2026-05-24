@@ -42,10 +42,10 @@ Copy or reference the skills from the `skills/` directory. As long as your tool 
 
 ```bash
 crunes list                            # what runes exist in this project
-crunes help rune <key>                 # args schema + examples for a rune
-crunes help utils                      # list all utils.* namespaces
-crunes help utils <ns>                 # function signatures for one namespace (e.g. ws, fs, cache)
-crunes help utils <ns> --format json   # machine-readable, for code generation
+crunes docs rune <key>                 # args schema + examples for a rune
+crunes docs utils                      # list all utils.* namespaces
+crunes docs utils <ns>                 # function signatures for one namespace (e.g. ws, fs, cache)
+crunes docs utils <ns> --format json   # machine-readable, for code generation
 crunes doctor                          # verify environment health
 ```
 
