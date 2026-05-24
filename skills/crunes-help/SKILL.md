@@ -18,21 +18,21 @@ description: Use when orienting yourself in a crunes project — which skill to 
 
 ```bash
 crunes help rune <key>                 # arg schema + examples
-crunes help rune <key> -a <key2>       # multiple runes
+crunes help rune <key> <key2>          # multiple runes
 crunes help rune <key> --format json   # JSON output
 ```
 
 ## Query utils.* API docs
 
 ```bash
-crunes help utils                      # list all 15 namespaces with one-line descriptions
+crunes help utils                      # list all 17 namespaces with one-line descriptions
 crunes help utils <ns>                 # full function signatures for one namespace
 crunes help utils <ns1> <ns2>          # multiple namespaces
 crunes help utils --format json        # machine-readable, all namespaces
 crunes help utils <ns> --format json   # machine-readable, one namespace
 ```
 
-Available namespaces: `archive` `cache` `crypto` `env` `fetch` `fs` `json` `md` `shell` `sqlite` `tree` `vars` `ws` `xml` `yaml`
+Available namespaces: `archive` `cache` `crypto` `env` `fetch` `fs` `json` `md` `rune` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
 
 Use `--format json` when you need parameter types and return object method lists for code generation.
 

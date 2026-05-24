@@ -39,7 +39,7 @@ crunes -p use docs                           # no ANSI (plain)
 crunes use api v2                            # positional arg "v2"
 crunes use api v2 --section endpoints        # section filter
 crunes use docs + api v2                     # batch: two runes in one call
-crunes use docs --format json                # JSON Section[] array
+crunes use --format json docs                # JSON Section[] array
 crunes use my-plugin:rune-key                # plugin rune
 crunes use my-plugin:rune-key arg1           # plugin rune with arg
 ```
@@ -68,5 +68,5 @@ Args inside `()` are comma-separated. Values containing spaces work naturally: `
 |---|---|
 | Token already in the user's prompt | Hook resolves automatically — do nothing |
 | Need live context mid-conversation before planning or coding | `crunes -p use <key>` |
-| Want to inspect raw JSON structure | `crunes use <key> --format json` |
+| Want to inspect raw JSON structure | `crunes use --format json <key>` |
 | Unsure what args a rune accepts | `crunes help rune <key>` |
