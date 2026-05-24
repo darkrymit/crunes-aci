@@ -33,7 +33,7 @@ crunes template use plugin-name:template-name     # from a specific plugin
 Rune files are ESM modules. All I/O goes through `@utils` — no Node.js builtins.
 
 ```js
-import { fs, md, tree, section, env, vars, rune, fetch, ws, json, yaml, xml, shell, cache, sqlite, archive, crypto } from '@utils'
+import { fs, md, tree, section, env, vars, rune, http, ws, json, yaml, xml, shell, cache, sqlite, archive, crypto } from '@utils'
 
 // Optional: declare the args schema
 export async function args(b) {
@@ -77,16 +77,16 @@ Quick reference:
 | `md` | `md.h1/h2/h3(text)` · `md.bold(text)` · `md.italic(text)` · `md.code(text)` · `md.codeBlock(text, lang?)` · `md.ul(items)` · `md.ol(items)` · `md.p(text)` · `md.table(headers, rows)` · `md.link(text, url)` |
 | `tree` | `tree.node(name, description, children?)` · `tree.format(root, { style? })` |
 | `section` | `section.create(name, data, { title, attrs })` |
-| `env` | `env.get(key, fallback?)` · `env.has(key)` |
-| `vars` | `vars.get(key, fallback?)` · `vars.has(key)` — reads rune config vars |
+| `env` | `env.read(key, fallback?)` · `env.has(key)` |
+| `vars` | `vars.read(key, fallback?)` · `vars.has(key)` — reads rune config vars |
 | `rune` | `rune.use(key, args[])` — call another rune · `rune.spawn(key, args[])` → `{ id }` — background · `rune.kill(id)` · `rune.exists(id)` → `boolean`  |
-| `fetch` | `fetch(url, { method?, headers?, body?, timeout? })` — returns `FetchResponse` with `.ok`, `.status`, `.text()`, `.json()` |
+| `http` | `http.fetch(url, { method?, headers?, body?, timeout? })` — returns `FetchResponse` with `.ok`, `.status`, `.text()`, `.json()` |
 | `ws` | `ws.client(url, opts?)` — returns `WsHandle` with `open()`, `send(msg)`, `close()`, `on(event, fn)` |
 | `time` | `time.after(ms)` — resolve after ms milliseconds; always `await` (no global setTimeout in isolate) |
 | `json` | `json.read(path)` · `json.write(path, data)` · `json.get(path, jsonPath)` · `json.getAll(path, jsonPath)` · `json.modify(path, fn)` |
 | `yaml` | `yaml.read(path)` · `yaml.write(path, data)` · `yaml.modify(path, fn)` |
 | `xml` | `xml.read(path)` · `xml.write(path, data)` · `xml.modify(path, fn)` |
-| `shell` | `shell(cmd, { throw?, trim?, timeout?, env? })` — called directly as `utils.shell(cmd)` |
+| `shell` | `shell.exec(cmd, { throw?, trim?, timeout?, env? })` / `shell.execInSession(cmd, { env? })` |
 | `cache` | `cache.open(location, name?)` — returns `CacheHandle` with `set(key, value, ttl?)`, `get(key)`, `delete(key)`, `clear()` |
 | `sqlite` | `sqlite.open(location, name?)` — returns `SqliteHandle` with `query/get/exec/transaction/close` |
 | `archive` | `archive.unzip(src, dest)` · `archive.zip(src, dest)` · `archive.untar(src, dest)` · `archive.tar(src, dest)` |

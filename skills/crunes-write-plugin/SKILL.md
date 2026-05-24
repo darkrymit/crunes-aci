@@ -73,7 +73,7 @@ Declared per-rune in `plugin.json`. Adding a new rune to an existing plugin coun
 | `fs.read:./**` | Read any file under the project root |
 | `fs.read:@plugin/**` | Read files in the plugin's own directory (always auto-granted) |
 | `fs.write:./**` | Write files under the project root |
-| `shell:<cmd-prefix>` | Run shell commands matching the given prefix |
+| `shell.exec:<cmd-prefix>` | Run shell commands matching the given prefix |
 | `fetch` | Make HTTP requests |
 | `env.get` | Read environment variables |
 
