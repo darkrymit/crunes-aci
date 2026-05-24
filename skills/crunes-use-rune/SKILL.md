@@ -38,11 +38,20 @@ crunes use docs                              # all sections, markdown output
 crunes -p use docs                           # no ANSI (plain)
 crunes use api v2                            # positional arg "v2"
 crunes use api v2 --section endpoints        # section filter
-crunes use docs + api v2                     # batch: two runes in one call
+crunes use -b docs + api v2                  # batch: two runes in one call (requires -b)
 crunes use --format json docs                # JSON Section[] array
 crunes use my-plugin:rune-key                # plugin rune
 crunes use my-plugin:rune-key arg1           # plugin rune with arg
 ```
+
+## ⚠️ The Strict 3-Tier Boundary
+`crunes` enforces a strict parsing boundary:
+1. **Global Flags** (e.g. `--cwd`, `-p`) MUST precede `use`.
+2. **Command Flags** (e.g. `-b`, `--format`) MUST immediately follow `use`.
+3. **Rune Args** MUST follow the `<key>`.
+
+Example: `crunes --cwd ./project -p use -b --format json docs`
+*If you place a global flag after `use` (e.g. `crunes use --cwd`), the CLI will instantly throw an error and exit.*
 
 `local:<key>` forces resolution from project config only. `plugin:<key>` forces a specific plugin. Bare `<key>` auto-resolves: project config first, then enabled plugins.
 
