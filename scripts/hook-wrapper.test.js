@@ -7,6 +7,8 @@ const { parseTokens, buildCliArgs } = require('./hook-wrapper.js')
 
 assert.deepEqual(parseTokens(''), [], 'empty prompt')
 assert.deepEqual(parseTokens('no tokens here'), [], 'no tokens')
+assert.deepEqual(parseTokens('$PATH'), [], 'uppercase env variable ignored')
+assert.deepEqual(parseTokens('$100'), [], 'numeric value ignored')
 assert.deepEqual(
   parseTokens('$docs'),
   [{ key: 'docs', rawArgs: '', rawSections: '' }],
@@ -83,8 +85,8 @@ assert.deepEqual(
     { key: 'docs', rawArgs: '', rawSections: '' },
     { key: 'api', rawArgs: 'v2', rawSections: 'endpoints' },
   ]),
-  ['use', '--format', 'json', 'docs', '+', '--section', 'endpoints', 'api', 'v2'],
-  'two tokens joined with +'
+  ['use', '--format', 'json', '-b', 'docs', '+', '--section', 'endpoints', 'api', 'v2'],
+  'two tokens joined with + and programmatically batched'
 )
 
 console.log('All tests passed.')

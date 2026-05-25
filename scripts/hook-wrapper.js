@@ -6,7 +6,8 @@ const { spawnSync } = require('child_process')
 
 // Matches: $key  $key(args)  $key::sections  $key(args)::sections
 // key may contain a single colon for plugin namespacing (my-plugin:rune-key)
-const TOKEN_REGEX = /\$([\w@-]+(?::(?!:)[\w@-]+)*)(?:\(([^)]*)\))?(?:::([^$\s]*))?/g
+// Key must start with a lowercase letter [a-z].
+const TOKEN_REGEX = /\$([a-z][\w@-]*(?::(?!:)[\w@-]+)*)(?:\(([^)]*)\))?(?:::([^$\s]*))?/g
 
 function parseTokens(prompt) {
   const tokens = []
@@ -24,6 +25,9 @@ function parseTokens(prompt) {
 
 function buildCliArgs(tokens) {
   const cliArgs = ['use', '--format', 'json']
+  if (tokens.length > 1) {
+    cliArgs.push('-b')
+  }
   for (let i = 0; i < tokens.length; i++) {
     if (i > 0) cliArgs.push('+')
     const { key, rawArgs, rawSections } = tokens[i]

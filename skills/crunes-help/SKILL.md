@@ -32,7 +32,7 @@ crunes docs utils --format json        # machine-readable, all namespaces
 crunes docs utils <ns> --format json   # machine-readable, one namespace
 ```
 
-Available namespaces: `archive` `cache` `crypto` `env` `fetch` `fs` `json` `md` `rune` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
+Available namespaces: `archive` `cache` `crypto` `env` `fs` `http` `json` `md` `rune` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
 
 Use `--format json` when you need parameter types and return object method lists for code generation.
 
