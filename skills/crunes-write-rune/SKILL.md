@@ -81,7 +81,7 @@ Quick reference:
 | `vars` | `vars.read(key, fallback?)` · `vars.has(key)` — reads rune config vars |
 | `rune` | `rune.use(key, args[])` — call another rune · `rune.spawn(key, args[])` → `{ id }` — background · `rune.kill(id)` · `rune.exists(id)` → `boolean`  |
 | `http` | `http.fetch(url, { method?, headers?, body?, timeout? })` — returns `FetchResponse` with `.ok`, `.status`, `.text()`, `.json()` |
-| `ws` | `ws.client(url, opts?)` — returns `WsHandle` with `open()`, `send(msg)`, `close()`, `on(event, fn)` |
+| `ws` | `ws.client(url, opts?)` — returns `WsHandle` with `open()`, `sendText(msg)`, `sendBinary(data)`, `close()`, `on(event, fn)` |
 | `time` | `time.after(ms)` — resolve after ms milliseconds; always `await` (no global setTimeout in isolate) |
 | `json` | `json.read(path)` · `json.write(path, data)` · `json.get(path, jsonPath)` · `json.getAll(path, jsonPath)` · `json.modify(path, fn)` |
 | `yaml` | `yaml.read(path)` · `yaml.write(path, data)` · `yaml.modify(path, fn)` |
