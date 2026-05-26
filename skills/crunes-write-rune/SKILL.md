@@ -38,22 +38,39 @@ import { fs, md, tree, section, env, vars, rune, http, ws, json, yaml, xml, shel
 // Optional: declare the args schema
 export async function args(b) {
   return b
-    .positional('<query>', 'Required positional arg')
-    .positional('[scope]', 'Optional positional arg (default: "all")')
-    .option('-c, --count <n>', 'Max results', 10)
-    .option('--strict', 'Exact match only', false)
-    .example('crunes use myrune hello', 'Basic usage')
-    .example('crunes use myrune hello src -c 5', 'With scope and limit')
-    .build()
+    // Root options/positionals
+    .option('--verbose', 'Verbose logging', false)
+    // Commands are registered recursively
+    .command('remote', 'Git remote commands', remote => {
+      remote
+        .command('add', 'Add a remote Repository', add => {
+          add
+            .positional('<name>', 'Remote name')
+            .positional('<url>', 'Remote URL')
+            .option('--fetch', 'Fetch immediately', true)
+        })
+        .command('remove', 'Remove remote repository', remove => {
+          remove.positional('<name>', 'Remote name')
+        })
+    })
 }
 
 // Required: produce context output
 export async function use(args) {
-  // args._          — positional args array (args._[0], args._[1], ...)
-  // args.count      — named option value
-  // args.strict     — boolean flag
-  // args.$raw       — raw unparsed string[] (before builder parsing)
-  return section.create('name', { type: 'markdown', content: '...' })
+  // Parsing is extremely developer friendly:
+  // - args.command      — space-separated matched command path string (e.g. 'remote add')
+  // - args.commands     — array of matched command levels (e.g. ['remote', 'add'])
+  // - args.name         — automatically mapped positional parameter '<name>' (offset auto-calculated!)
+  // - args.url          — automatically mapped positional parameter '<url>'
+  // - args.verbose      — boolean option parsed from the root command
+  // - args.$raw         — raw unparsed string[]
+  
+  if (args.command === 'remote add') {
+    return section.create('git-add', { 
+      type: 'markdown', 
+      content: `Adding remote ${args.name} at ${args.url} (Fetch: ${args.fetch})` 
+    })
+  }
 }
 ```
 
