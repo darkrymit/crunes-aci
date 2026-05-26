@@ -37,7 +37,7 @@ Examples:
 crunes use docs                              # all sections, markdown output
 crunes -p use docs                           # no ANSI (plain)
 crunes use api v2                            # positional arg "v2"
-crunes use api v2 --section endpoints        # section filter
+crunes use -s endpoints api v2               # section filter
 crunes use -b docs + api v2                  # batch: two runes in one call (requires -b)
 crunes use --format json docs                # JSON Section[] array
 crunes use my-plugin:rune-key                # plugin rune
