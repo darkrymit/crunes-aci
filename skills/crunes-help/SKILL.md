@@ -25,14 +25,14 @@ crunes docs rune <key> --format json   # JSON output
 ## Query utils.* API docs
 
 ```bash
-crunes docs utils                      # list all 18 namespaces with one-line descriptions
+crunes docs utils                      # list all 19 namespaces with one-line descriptions
 crunes docs utils <ns>                 # full function signatures for one namespace
 crunes docs utils <ns1> <ns2>          # multiple namespaces
 crunes docs utils --format json        # machine-readable, all namespaces
 crunes docs utils <ns> --format json   # machine-readable, one namespace
 ```
 
-Available namespaces: `archive` `cache` `crypto` `env` `fs` `http` `json` `md` `rune` `section` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
+Available namespaces: `archive` `cache` `codec` `crypto` `env` `fs` `http` `json` `md` `rune` `section` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
 
 Use `--format json` when you need parameter types and return object method lists for code generation.
 
