@@ -24,7 +24,7 @@ function parseTokens(prompt) {
 }
 
 function buildCliArgs(tokens) {
-  const cliArgs = ['use', '--format', 'json']
+  const cliArgs = ['use', '--format', 'jsonl']
   if (tokens.length > 1) {
     cliArgs.push('-b')
   }
@@ -75,19 +75,17 @@ function main(raw) {
     return
   }
 
-  let allSections
-  try {
-    allSections = JSON.parse(result.stdout)
-  } catch (err) {
-    process.stderr.write(`[crunes] Query returned invalid JSON: ${err.message}\n`)
-    emit('')
-    return
-  }
-
-  if (!Array.isArray(allSections)) {
-    process.stderr.write(`[crunes] Query returned unexpected JSON shape\n`)
-    emit('')
-    return
+  const allSections = []
+  const lines = result.stdout.split('\n').map(l => l.trim()).filter(Boolean)
+  for (const line of lines) {
+    try {
+      const parsed = JSON.parse(line)
+      if (parsed.type === 'section') {
+        allSections.push(parsed.section)
+      }
+    } catch (err) {
+      process.stderr.write(`[crunes] Query returned invalid JSON: ${err.message} (Line: ${line})\n`)
+    }
   }
 
   const xmlBlocks = []

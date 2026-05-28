@@ -57,27 +57,27 @@ assert.deepEqual(
 
 assert.deepEqual(
   buildCliArgs([{ key: 'docs', rawArgs: '', rawSections: '' }]),
-  ['use', '--format', 'json', 'docs'],
+  ['use', '--format', 'jsonl', 'docs'],
   'single bare key'
 )
 assert.deepEqual(
   buildCliArgs([{ key: 'api', rawArgs: 'v2', rawSections: '' }]),
-  ['use', '--format', 'json', 'api', 'v2'],
+  ['use', '--format', 'jsonl', 'api', 'v2'],
   'single arg'
 )
 assert.deepEqual(
   buildCliArgs([{ key: 'api', rawArgs: 'v2', rawSections: 'endpoints' }]),
-  ['use', '--format', 'json', '--section', 'endpoints', 'api', 'v2'],
+  ['use', '--format', 'jsonl', '--section', 'endpoints', 'api', 'v2'],
   'arg + section filter'
 )
 assert.deepEqual(
   buildCliArgs([{ key: 'api', rawArgs: '', rawSections: 'endpoints,errors' }]),
-  ['use', '--format', 'json', '--section', 'endpoints,errors', 'api'],
+  ['use', '--format', 'jsonl', '--section', 'endpoints,errors', 'api'],
   'section filter only'
 )
 assert.deepEqual(
   buildCliArgs([{ key: 'search', rawArgs: 'hello world,src,--count,5', rawSections: '' }]),
-  ['use', '--format', 'json', 'search', 'hello world', 'src', '--count', '5'],
+  ['use', '--format', 'jsonl', 'search', 'hello world', 'src', '--count', '5'],
   'comma-split args including space-containing value'
 )
 assert.deepEqual(
@@ -85,7 +85,7 @@ assert.deepEqual(
     { key: 'docs', rawArgs: '', rawSections: '' },
     { key: 'api', rawArgs: 'v2', rawSections: 'endpoints' },
   ]),
-  ['use', '--format', 'json', '-b', 'docs', '+', '--section', 'endpoints', 'api', 'v2'],
+  ['use', '--format', 'jsonl', '-b', 'docs', '+', '--section', 'endpoints', 'api', 'v2'],
   'two tokens joined with + and programmatically batched'
 )
 

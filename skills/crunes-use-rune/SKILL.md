@@ -39,10 +39,13 @@ crunes -p use docs                           # no ANSI (plain)
 crunes use api v2                            # positional arg "v2"
 crunes use -s endpoints api v2               # section filter
 crunes use -b docs + api v2                  # batch: two runes in one call (requires -b)
-crunes use --format json docs                # JSON Section[] array
+crunes use --format jsonl docs               # structured JSONL event stream (log + section events)
 crunes use my-plugin:rune-key                # plugin rune
 crunes use my-plugin:rune-key arg1           # plugin rune with arg
 ```
+
+`--format text` (default) prints tagged headers `[instance:rune:type]` per event.
+`--format jsonl` emits one JSON object per line: `{ type, rune, instance, message? | section? }`.
 
 ## ⚠️ The Strict 3-Tier Boundary
 `crunes` enforces a strict parsing boundary:
@@ -77,5 +80,5 @@ Args inside `()` are comma-separated. Values containing spaces work naturally: `
 |---|---|
 | Token already in the user's prompt | Hook resolves automatically — do nothing |
 | Need live context mid-conversation before planning or coding | `crunes -p use <key>` |
-| Want to inspect raw JSON structure | `crunes use --format json <key>` |
+| Want to inspect structured event stream | `crunes use --format jsonl <key>` |
 | Unsure what args a rune accepts | `crunes docs rune <key>` |
