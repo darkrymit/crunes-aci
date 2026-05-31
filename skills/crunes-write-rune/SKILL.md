@@ -97,7 +97,7 @@ Quick reference:
 | `env` | `env.read(key, fallback?)` · `env.has(key)` |
 | `vars` | `vars.read(key, fallback?)` · `vars.has(key)` — reads rune config vars |
 | `rune` | `rune.use(key, args[])` — call another rune · `rune.spawn(key, args[])` → `{ id }` — background · `rune.kill(id)` · `rune.exists(id)` → `boolean`  |
-| `http` | `http.fetch(url, { method?, headers?, body?, timeout? })` — `body` can be `string | MultipartEntry[]` for ordered upload; returns `FetchResponse` with `.ok`, `.status`, `.text()`, `.json()` |
+| `http` | `http.fetch(input, { method?, headers?, body?, timeout? })` — `input` is a URL string or `Request`; `body` can be `string \| Uint8Array \| ReadableStream \| Blob \| FormData \| URLSearchParams`; returns `Response` with `.ok`, `.status`, `.headers`, `.text()`, `.json()`, `.blob()`, `.body()` (stream). Also available as the global `fetch()`. |
 | `ws` | `ws.client(url, opts?)` — returns `WsHandle` with `open()`, `sendText(msg)`, `sendBinary(data)`, `close()`, `on(event, fn)` |
 | `time` | `time.after(ms)` — resolves after ms milliseconds · global `setTimeout`/`clearTimeout`/`setInterval`/`clearInterval` are also available directly |
 | `json` | `json.read(path)` · `json.write(path, data)` · `json.readPath(path, jsonPath)` · `json.readPathAll(path, jsonPath)` · `json.modify(path, fn)` |
