@@ -23,6 +23,19 @@ function parseTokens(prompt) {
   return tokens
 }
 
+function parseRawArgs(str) {
+  const args = []
+  const regex = /"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*)'|([^,]+)/g
+  let match
+  while ((match = regex.exec(str)) !== null) {
+    const val = (match[1] !== undefined ? match[1] : (match[2] !== undefined ? match[2] : match[3])).trim()
+    if (val !== undefined && val !== '') {
+      args.push(val)
+    }
+  }
+  return args
+}
+
 function buildCliArgs(tokens) {
   const cliArgs = ['use', '--format', 'jsonl']
   if (tokens.length > 1) {
@@ -34,7 +47,7 @@ function buildCliArgs(tokens) {
     if (rawSections) cliArgs.push('--section', rawSections)
     cliArgs.push(key)
     if (rawArgs) {
-      const args = rawArgs.split(',').map(a => a.trim()).filter(Boolean)
+      const args = parseRawArgs(rawArgs)
       cliArgs.push(...args)
     }
   }
@@ -166,4 +179,4 @@ if (require.main === module) {
   })
 }
 
-module.exports = { parseTokens, buildCliArgs }
+module.exports = { parseTokens, buildCliArgs, parseRawArgs }
