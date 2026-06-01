@@ -52,6 +52,16 @@ assert.deepEqual(
   [{ key: 'my-plugin:rune-key', rawArgs: 'arg', rawSections: '' }],
   'plugin-namespaced key'
 )
+assert.deepEqual(
+  parseTokens('$m(foo(bar))'),
+  [{ key: 'm', rawArgs: 'foo(bar)', rawSections: '' }],
+  'nested parentheses'
+)
+assert.deepEqual(
+  parseTokens('$m(foo(bar(baz)))'),
+  [{ key: 'm', rawArgs: 'foo(bar(baz))', rawSections: '' }],
+  'deeply nested parentheses'
+)
 
 // ─── buildCliArgs ─────────────────────────────────────────────────────────────
 

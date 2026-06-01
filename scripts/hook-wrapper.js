@@ -7,18 +7,78 @@ const { spawnSync } = require('child_process')
 // Matches: $key  $key(args)  $key::sections  $key(args)::sections
 // key may contain a single colon for plugin namespacing (my-plugin:rune-key)
 // Key must start with a lowercase letter [a-z].
-const TOKEN_REGEX = /\$([a-z][\w@-]*(?::(?!:)[\w@-]+)*)(?:\(([^)]*)\))?(?:::([^$\s]*))?/g
-
 function parseTokens(prompt) {
   const tokens = []
-  let match
-  TOKEN_REGEX.lastIndex = 0
-  while ((match = TOKEN_REGEX.exec(prompt)) !== null) {
-    tokens.push({
-      key: match[1],
-      rawArgs: match[2] ?? '',
-      rawSections: match[3] ?? '',
-    })
+  let i = 0
+  while (i < prompt.length) {
+    if (prompt[i] === '$' && i + 1 < prompt.length && /[a-z]/.test(prompt[i + 1])) {
+      const startIdx = i
+      i++ // skip '$'
+      
+      let key = ''
+      while (i < prompt.length) {
+        const char = prompt[i]
+        if (/[\w@-]/.test(char)) {
+          key += char
+          i++
+        } else if (char === ':') {
+          if (i + 1 < prompt.length && prompt[i + 1] === ':') {
+            break
+          }
+          key += char
+          i++
+        } else {
+          break
+        }
+      }
+
+      if (!/^[a-z][\w@-]*(?::[\w@-]+)*$/.test(key)) {
+        i = startIdx + 1
+        continue
+      }
+      
+      let rawArgs = ''
+      if (i < prompt.length && prompt[i] === '(') {
+        i++ // skip '('
+        let parenCount = 1
+        let argStart = i
+        while (i < prompt.length && parenCount > 0) {
+          const char = prompt[i]
+          if (char === '(') {
+            parenCount++
+          } else if (char === ')') {
+            parenCount--
+          }
+          if (parenCount > 0) {
+            i++
+          }
+        }
+        if (parenCount === 0) {
+          rawArgs = prompt.substring(argStart, i)
+          i++ // skip ')'
+        } else {
+          i = startIdx + 1
+          continue
+        }
+      }
+      
+      let rawSections = ''
+      if (i + 1 < prompt.length && prompt[i] === ':' && prompt[i + 1] === ':') {
+        i += 2
+        while (i < prompt.length) {
+          const char = prompt[i]
+          if (/\s|\$/.test(char)) {
+            break
+          }
+          rawSections += char
+          i++
+        }
+      }
+      
+      tokens.push({ key, rawArgs, rawSections })
+    } else {
+      i++
+    }
   }
   return tokens
 }
@@ -73,11 +133,11 @@ function main(raw) {
   }
 
   const cliArgs = buildCliArgs(tokens)
+  const cmd = process.platform === 'win32' ? 'crunes.cmd' : 'crunes'
 
-  const result = spawnSync('crunes', cliArgs, {
+  const result = spawnSync(cmd, cliArgs, {
     encoding: 'utf8',
     cwd: process.cwd(),
-    shell: true,
   })
 
   if (result.error || result.status !== 0) {
