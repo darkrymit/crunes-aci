@@ -103,7 +103,7 @@ Quick reference:
 | `json` | `json.read(path)` · `json.write(path, data)` · `json.readPath(path, jsonPath)` · `json.readPathAll(path, jsonPath)` · `json.modify(path, fn)` |
 | `yaml` | `yaml.read(path)` · `yaml.write(path, data)` · `yaml.modify(path, fn)` |
 | `xml` | `xml.read(path)` · `xml.write(path, data)` · `xml.modify(path, fn)` |
-| `shell` | `shell.exec(cmd, { throw?, trim?, timeout?, env? })` · `shell.execInSession(cmd, { env?, signal? })` → `ShellSession` with `stdin.write/end`, `stdout/stderr.on('data'/'end')`, `on('exit'/'error')`, `kill(signal?)` |
+| `shell` | `shell.exec(cmd, { throw?, trim?, timeout?, env?, binary?, stdin? })` → `ShellResult` (destructure `{ stdout }` to capture the output string) · `shell.execInSession(cmd, { env?, signal? })` → `ShellSession` |
 | `cache` | `cache.open(location, name?)` — returns `CacheHandle` with `set(key, value, ttl?)`, `get(key)`, `delete(key)`, `clear()` |
 | `sqlite` | `sqlite.open(location, name?)` — returns `SqliteHandle` with `query/get/exec/transaction/close` |
 | `archive` | `archive.unzip(src, dest)` · `archive.zip(src, dest)` · `archive.untar(src, dest, {gzip?})` · `archive.tar(src, dest, {gzip?})` — `tar` defaults to `gzip:true`; `untar` auto-detects compression |
