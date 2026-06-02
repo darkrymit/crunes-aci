@@ -9,10 +9,10 @@ description: Use when scaffolding or authoring a new crunes plugin — creating 
 
 ```bash
 # Interactive
-crunes plugin create <name>
+crunes -p plugin create <name>
 
 # Non-interactive
-crunes -y plugin create <name> \
+crunes -p -y plugin create <name> \
   --description "What this plugin provides" \
   --author "Your Name" \
   --license MIT \
@@ -99,15 +99,15 @@ export async function use(args) {
 }
 ```
 
-Templates live in `templates/` and are scaffolded into user projects via `crunes template use plugin-name:template-name`. They have the same file structure as runes.
+Templates live in `templates/` and are scaffolded into user projects via `crunes -p template use plugin-name:template-name`. They have the same file structure as runes.
 
 ## Test locally before publishing
 
 ```bash
-crunes plugin install ./<name>         # install from local dir
-crunes use <name>:example              # run the example rune
-crunes plugin list                     # confirm it appears as enabled
-crunes plugin uninstall <name>         # clean up after testing
+crunes -p plugin install ./<name>         # install from local dir
+crunes -p use <name>:example              # run the example rune
+crunes -p plugin list                     # confirm it appears as enabled
+crunes -p plugin uninstall <name>         # clean up after testing
 ```
 
 ## Publish via marketplace
@@ -116,11 +116,11 @@ crunes plugin uninstall <name>         # clean up after testing
 
 ```bash
 # Add as a local marketplace source
-crunes marketplace add ./path/to/plugin
+crunes -p marketplace add ./path/to/plugin
 
 # Add as a remote marketplace source
-crunes marketplace add https://raw.githubusercontent.com/owner/repo/main/.crunes-plugin/marketplace.json
+crunes -p marketplace add https://raw.githubusercontent.com/owner/repo/main/.crunes-plugin/marketplace.json
 
 # Install from that source
-crunes plugin install <name>
+crunes -p plugin install <name>
 ```

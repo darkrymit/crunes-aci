@@ -17,29 +17,26 @@ description: Use when orienting yourself in a crunes project — which skill to 
 ## Inspect a rune's API before calling it
 
 ```bash
-crunes docs rune <key>                 # arg schema + examples
-crunes docs rune <key> <key2>          # multiple runes
-crunes docs rune <key> --format json   # JSON output
+crunes -p docs rune <key>                 # arg schema + examples (includes file path for local runes)
+crunes -p docs rune <key> <key2>          # multiple runes
+crunes -p docs use                        # how the use(args) export works and what args contains
+crunes -p docs args                       # how to declare the args(builder) export
 ```
 
 ## Query utils.* API docs
 
 ```bash
-crunes docs utils                      # list all 19 namespaces with one-line descriptions
-crunes docs utils <ns>                 # full function signatures for one namespace
-crunes docs utils <ns1> <ns2>          # multiple namespaces
-crunes docs utils --format json        # machine-readable, all namespaces
-crunes docs utils <ns> --format json   # machine-readable, one namespace
+crunes -p docs utils                      # list all 19 namespaces with one-line descriptions
+crunes -p docs utils <ns>                 # full function signatures for one namespace
+crunes -p docs utils <ns1> <ns2>          # multiple namespaces
 ```
 
 Available namespaces: `archive` `cache` `codec` `crypto` `env` `fs` `http` `json` `md` `rune` `section` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
 
-Use `--format json` when you need parameter types and return object method lists for code generation.
-
 ## Verify the environment
 
 ```bash
-crunes doctor    # checks Node version, config presence, plugin registry integrity
+crunes -p doctor    # checks Node version, config presence, plugin registry integrity
 ```
 
 ## Global flags
@@ -57,9 +54,9 @@ Available on every `crunes` command:
 
 | Symptom | Fix |
 |---|---|
-| Don't know what runes exist | `crunes list` |
-| Rune output looks wrong | `crunes -p use <key>` to see raw output; `crunes check <key>` to validate shape |
-| Command not found / unexpected error | `crunes doctor` |
-| Want to see a rune's args before calling | `crunes docs rune <key>` |
+| Don't know what runes exist | `crunes -p list` |
+| Rune output looks wrong | `crunes -p use <key>` to see raw output; `crunes -p check <key>` to validate shape |
+| Command not found / unexpected error | `crunes -p doctor` |
+| Want to see a rune's args before calling | `crunes -p docs rune <key>` |
 | Need plain output for piping or AI context | Add `-p` global flag: `crunes -p use <key>` |
-| Don't know what `utils.ws` / `utils.fs` functions look like | `crunes docs utils ws` or `crunes docs utils ws --format json` |
+| Don't know what `utils.ws` / `utils.fs` functions look like | `crunes -p docs utils ws` |

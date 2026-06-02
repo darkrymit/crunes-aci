@@ -9,12 +9,12 @@ description: Use when creating a new rune or editing an existing one — scaffol
 
 ```bash
 # Interactive (prompts for name, description)
-crunes create <key>
+crunes -p create <key>
 
 # Non-interactive
-crunes -y create <key> --format markdown
-crunes -y create <key> --format tree
-crunes -y create <key> --format markdown --name "API Overview" --description "Public API endpoints"
+crunes -p -y create <key> --format markdown
+crunes -p -y create <key> --format tree
+crunes -p -y create <key> --format markdown --name "API Overview" --description "Public API endpoints"
 ```
 
 Creates `.crunes/runes/<key>.js` and registers it in `.crunes/config.json`.
@@ -22,10 +22,10 @@ Creates `.crunes/runes/<key>.js` and registers it in `.crunes/config.json`.
 ## Scaffold from a template (faster)
 
 ```bash
-crunes template list                              # see available templates
-crunes template use <template>                    # copy + register
-crunes template use <template> --as <new-key>     # register under different key
-crunes template use plugin-name:template-name     # from a specific plugin
+crunes -p template list                              # see available templates
+crunes -p template use <template>                    # copy + register
+crunes -p template use <template> --as <new-key>     # register under different key
+crunes -p template use plugin-name:template-name     # from a specific plugin
 ```
 
 ## Rune file structure
@@ -82,9 +82,15 @@ If `args()` is omitted, `args._` contains the positional strings passed to the r
 For full function signatures, parameter types, and return-object method lists, run:
 
 ```bash
-crunes docs utils                      # all namespaces
-crunes docs utils <ns>                 # one namespace (e.g. ws, fs, cache)
-crunes docs utils <ns> --format json   # machine-readable
+crunes -p docs utils                      # all namespaces
+crunes -p docs utils <ns>                 # one namespace (e.g. ws, fs, cache)
+```
+
+For the `use(args)` lifecycle contract and what `args` contains:
+
+```bash
+crunes -p docs use    # use(args) export: args structure, $command, $commands, args._, named params
+crunes -p docs args   # args(builder) export: option/positional/command declarations
 ```
 
 Quick reference:
@@ -204,6 +210,6 @@ return null
 ```bash
 crunes -p use <key>                    # render output (plain)
 crunes -p use <key> arg1 arg2          # test with args
-crunes check <key>                     # validate output shape
-crunes bench <key>                     # check execution time
+crunes -p check <key>                  # validate output shape
+crunes -p bench <key>                  # check execution time
 ```

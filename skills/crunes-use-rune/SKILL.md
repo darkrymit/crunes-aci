@@ -8,21 +8,20 @@ description: Use when fetching or consuming rune output — listing what runes e
 ## Setup (first time in a project)
 
 ```bash
-crunes init    # creates .crunes/config.json if it doesn't exist
+crunes -p init    # creates .crunes/config.json if it doesn't exist
 ```
 
 ## Discover available runes
 
 ```bash
-crunes list                       # table: key, name, description, path
-crunes -p list                    # plain tab-separated (AI-friendly)
+crunes -p list                    # table: key, name, description, path
 crunes -p list --format json      # JSON array
 ```
 
 ## Inspect a rune's args before calling
 
 ```bash
-crunes docs rune <key>
+crunes -p docs rune <key>
 ```
 
 ## Run a rune — CLI syntax
@@ -34,14 +33,13 @@ crunes [global-flags] use [--section s1,s2] <key> [rune-args...] [+ [--section s
 Examples:
 
 ```bash
-crunes use docs                              # all sections, markdown output
-crunes -p use docs                           # no ANSI (plain)
-crunes use api v2                            # positional arg "v2"
-crunes use -s endpoints api v2               # section filter
-crunes use -b docs + api v2                  # batch: two runes in one call (requires -b)
-crunes use --format jsonl docs               # structured JSONL event stream (log + section events)
-crunes use my-plugin:rune-key                # plugin rune
-crunes use my-plugin:rune-key arg1           # plugin rune with arg
+crunes -p use docs                              # all sections, plain output
+crunes -p use api v2                            # positional arg "v2"
+crunes -p use -s endpoints api v2               # section filter
+crunes -p use -b docs + api v2                  # batch: two runes in one call (requires -b)
+crunes -p use --format jsonl docs               # structured JSONL event stream (log + section events)
+crunes -p use my-plugin:rune-key                # plugin rune
+crunes -p use my-plugin:rune-key arg1           # plugin rune with arg
 ```
 
 `--format text` (default) prints tagged headers `[instance:rune:type]` per event.
@@ -80,5 +78,5 @@ Args inside `()` are comma-separated. Values containing spaces work naturally: `
 |---|---|
 | Token already in the user's prompt | Hook resolves automatically — do nothing |
 | Need live context mid-conversation before planning or coding | `crunes -p use <key>` |
-| Want to inspect structured event stream | `crunes use --format jsonl <key>` |
-| Unsure what args a rune accepts | `crunes docs rune <key>` |
+| Want to inspect structured event stream | `crunes -p use --format jsonl <key>` |
+| Unsure what args a rune accepts | `crunes -p docs rune <key>` |
