@@ -51,7 +51,7 @@ crunes doctor                          # verify environment health
 
 ## Automatic context injection (Claude Code)
 
-The `UserPromptSubmit` hook automatically resolves `$key(args)` tokens and injects rune output as XML context before Claude sees your prompt:
+The `UserPromptSubmit` hook automatically resolves `$$key(args)` tokens and injects rune output as XML context before Claude sees your prompt:
 
 ```xml
 <context title="Setup Guide" id="setup">
@@ -65,12 +65,12 @@ Token syntax:
 
 | Token | Meaning |
 |---|---|
-| `$key` | All sections |
-| `$key(arg1,arg2)` | With positional args |
-| `$key::section1,section2` | Section filter |
-| `$key(arg1)::section` | Args + section filter |
-| `$my-plugin:rune-key` | Plugin rune |
-| `$my-plugin:rune-key(arg)::sec` | Plugin rune, args + section |
+| `$$key` | All sections |
+| `$$key(arg1,arg2)` | With positional args |
+| `$$key::section1,section2` | Section filter |
+| `$$key(arg1)::section` | Args + section filter |
+| `$$my-plugin:rune-key` | Plugin rune |
+| `$$my-plugin:rune-key(arg)::sec` | Plugin rune, args + section |
 
 ## Project Setup
 
@@ -88,7 +88,7 @@ See [crunes-cli](https://github.com/darkrymit/context-runes-cli) for the full ru
 ```
 UserPromptSubmit
   → hook-wrapper.js reads stdin JSON { prompt: "..." }
-  → parses `$key(args)[::sections]` tokens
+  → parses `$$key(args)[::sections]` tokens
   → runs `crunes use <keys...> --format json`
   → iterates Section[] JSON output
   → builds <name title="..." ...>content</name> XML per section

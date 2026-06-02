@@ -11,9 +11,9 @@ function parseTokens(prompt) {
   const tokens = []
   let i = 0
   while (i < prompt.length) {
-    if (prompt[i] === '$' && i + 1 < prompt.length && /[a-z]/.test(prompt[i + 1])) {
+    if (prompt[i] === '$' && i + 1 < prompt.length && prompt[i + 1] === '$' && i + 2 < prompt.length && /[a-z]/.test(prompt[i + 2])) {
       const startIdx = i
-      i++ // skip '$'
+      i += 2 // skip '$$'
       
       let key = ''
       while (i < prompt.length) {
@@ -85,13 +85,34 @@ function parseTokens(prompt) {
 
 function parseRawArgs(str) {
   const args = []
-  const regex = /"([^"\\]*(?:\\.[^"\\]*)*)"|'([^'\\]*(?:\\.[^'\\]*)*)'|([^,]+)/g
-  let match
-  while ((match = regex.exec(str)) !== null) {
-    const val = (match[1] !== undefined ? match[1] : (match[2] !== undefined ? match[2] : match[3])).trim()
-    if (val !== undefined && val !== '') {
-      args.push(val)
+  let current = ''
+  let inDouble = false
+  let inSingle = false
+  let i = 0
+  while (i < str.length) {
+    const char = str[i]
+    if (char === '"' && !inSingle) {
+      inDouble = !inDouble
+      i++
+    } else if (char === "'" && !inDouble) {
+      inSingle = !inSingle
+      i++
+    } else if (char === ',' && !inDouble && !inSingle) {
+      if (current.trim() !== '') {
+        args.push(current.trim())
+      }
+      current = ''
+      i++
+    } else if (char === '\\' && i + 1 < str.length) {
+      current += str[i + 1]
+      i += 2
+    } else {
+      current += char
+      i++
     }
+  }
+  if (current.trim() !== '') {
+    args.push(current.trim())
   }
   return args
 }

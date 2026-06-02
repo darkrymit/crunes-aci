@@ -1,6 +1,6 @@
 ---
 name: crunes-use-rune
-description: Use when fetching or consuming rune output — listing what runes exist, running them via CLI, or understanding $token syntax for prompts. Do NOT invoke manually if the user's prompt already contains $key or $key(args) tokens — those are resolved automatically by the UserPromptSubmit hook before the message arrives.
+description: Use when fetching or consuming rune output — listing what runes exist, running them via CLI, or understanding $$token syntax for prompts. Do NOT invoke manually if the user's prompt already contains $$key or $$key(args) tokens — those are resolved automatically by the UserPromptSubmit hook before the message arrives.
 ---
 
 # Consuming Runes
@@ -63,16 +63,16 @@ Example: `crunes --cwd ./project -p use -b --format json docs`
 Tokens in the user's prompt are resolved automatically by the `UserPromptSubmit` hook — no manual `crunes use` needed.
 
 ```
-$key                           all sections
-$key(arg1,arg2)                positional args (comma-separated)
-$key::section1,section2        section filter
-$key(arg1,arg2)::section       args + section filter
-my-plugin:rune-key             plugin rune
-my-plugin:rune-key(arg1)       plugin rune with arg
-my-plugin:rune-key(arg)::sec   plugin rune, args + section filter
+$$key                           all sections
+$$key(arg1,arg2)                positional args (comma-separated)
+$$key::section1,section2        section filter
+$$key(arg1,arg2)::section       args + section filter
+$$my-plugin:rune-key             plugin rune
+$$my-plugin:rune-key(arg1)       plugin rune with arg
+$$my-plugin:rune-key(arg)::sec   plugin rune, args + section filter
 ```
 
-Args inside `()` are comma-separated. Values containing spaces work naturally: `$search(hello world,src)` passes `hello world` as the first arg and `src` as the second.
+Args inside `()` are comma-separated. Values containing spaces work naturally: `$$search(hello world,src)` passes `hello world` as the first arg and `src` as the second.
 
 ## When to use CLI vs hook
 
