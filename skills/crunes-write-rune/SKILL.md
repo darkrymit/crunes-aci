@@ -58,14 +58,15 @@ export async function args(b) {
 // Required: produce context output
 export async function use(args) {
   // Parsing is extremely developer friendly:
-  // - args.command      — space-separated matched command path string (e.g. 'remote add')
-  // - args.commands     — array of matched command levels (e.g. ['remote', 'add'])
-  // - args.name         — automatically mapped positional parameter '<name>' (offset auto-calculated!)
+  // - args.$command     — space-separated matched command path string (e.g. 'remote add')
+  // - args.$commands    — array of matched command levels (e.g. ['remote', 'add'])
+  // - args._            — data positionals only (command tokens stripped)
+  // - args.name         — automatically mapped positional parameter '<name>'
   // - args.url          — automatically mapped positional parameter '<url>'
   // - args.verbose      — boolean option parsed from the root command
   // - args.$raw         — raw unparsed string[]
-  
-  if (args.command === 'remote add') {
+
+  if (args.$command === 'remote add') {
     return section.create('git-add', { 
       type: 'markdown', 
       content: `Adding remote ${args.name} at ${args.url} (Fetch: ${args.fetch})` 
@@ -74,7 +75,7 @@ export async function use(args) {
 }
 ```
 
-If `args()` is omitted, `args._` contains the raw positional strings passed to the rune.
+If `args()` is omitted, `args._` contains the positional strings passed to the rune (command tokens are always stripped).
 
 ## `@utils` reference
 
