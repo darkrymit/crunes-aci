@@ -103,14 +103,14 @@ Quick reference:
 | `section` | `section.create(name, data, opts?)` · `section.emit(section)` — stream section before return · `section.match(name, patterns[])` · `section.selected()` |
 | `env` | `env.read(key, fallback?)` · `env.has(key)` |
 | `vars` | `vars.read(key, fallback?)` · `vars.has(key)` — reads rune config vars |
-| `rune` | `rune.use(key, args[])` — call another rune · `rune.spawn(key, args[])` → `{ id }` — background · `rune.kill(id)` · `rune.exists(id)` → `boolean`  |
+| `rune` | `rune.exec(key, args[])` → `RuneResult` — call another rune and get its output · `rune.job.start(key, args[])` → `{ id }` — launch as background job · `rune.job.kill(id)` · `rune.job.exists(id)` → `boolean` · `rune.job.stdout(id)` / `rune.job.stderr(id)` — read log output · `rune.job.sections(id)` → `Section[]` |
 | `http` | `http.fetch(input, { method?, headers?, body?, timeout? })` — `input` is a URL string or `Request`; `body` can be `string \| Uint8Array \| ReadableStream \| Blob \| FormData \| URLSearchParams`; returns `Response` with `.ok`, `.status`, `.headers`, `.text()`, `.json()`, `.blob()`, `.body()` (stream). Also available as the global `fetch()`. |
 | `ws` | `ws.client(url, opts?)` — returns `WsHandle` with `open()`, `sendText(msg)`, `sendBinary(data)`, `close()`, `on(event, fn)` |
 | `time` | `time.after(ms)` — resolves after ms milliseconds · global `setTimeout`/`clearTimeout`/`setInterval`/`clearInterval` are also available directly |
 | `json` | `json.read(path)` · `json.write(path, data)` · `json.readPath(path, jsonPath)` · `json.readPathAll(path, jsonPath)` · `json.modify(path, fn)` |
 | `yaml` | `yaml.read(path)` · `yaml.write(path, data)` · `yaml.modify(path, fn)` |
 | `xml` | `xml.read(path)` · `xml.write(path, data)` · `xml.modify(path, fn)` |
-| `shell` | `shell.exec(cmd, { throw?, trim?, timeout?, env?, binary?, stdin? })` → `ShellResult` (destructure `{ stdout }` to capture the output string) · `shell.execInSession(cmd, { env?, signal? })` → `ShellSession` |
+| `shell` | `shell.exec(cmd, { throw?, trim?, timeout?, env?, binary?, stdin? })` → `ShellResult` (destructure `{ stdout }` to capture the output string) · `shell.spawn(cmd, { env?, signal? })` → `ShellSession` · `shell.job.start(cmd, opts?)` → `{ id }` — detached background shell with log-backed I/O |
 | `cache` | `cache.open(location, name?)` — returns `CacheHandle` with `set(key, value, ttl?)`, `get(key)`, `delete(key)`, `clear()` |
 | `sqlite` | `sqlite.open(location, name?)` — returns `SqliteHandle` with `query/get/exec/transaction/close` |
 | `archive` | `archive.unzip(src, dest)` · `archive.zip(src, dest)` · `archive.untar(src, dest, {gzip?})` · `archive.tar(src, dest, {gzip?})` — `tar` defaults to `gzip:true`; `untar` auto-detects compression |
@@ -120,19 +120,19 @@ All `fs` paths are relative to the project root (the directory containing `.crun
 
 ## Streaming / interactive shell
 
-Use `execInSession` for interactive processes or real-time output streaming. Combine with
+Use `shell.spawn` for interactive processes or real-time output streaming. Combine with
 `AbortController` to impose a limit or timeout, and `section.emit` to stream partial results.
 
 ```js
 import { shell, section } from '@utils'
 
-export async function use(args) {
+export async function run(args) {
   const limit = args._[0] ? parseInt(args._[0]) : 5
   const controller = new AbortController()
   const decoder = new TextDecoder()
 
   return new Promise((resolve, reject) => {
-    const session = shell.execInSession('node counter.js', { signal: controller.signal })
+    const session = shell.spawn('node counter.js', { signal: controller.signal })
     const lines = []
 
     session.stdout.on('data', (chunk) => {
