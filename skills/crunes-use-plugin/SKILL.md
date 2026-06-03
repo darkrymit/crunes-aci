@@ -44,8 +44,8 @@ On update, only new or escalated permissions trigger re-consent — not the full
 ## Use plugin rune keys
 
 ```bash
-crunes -p use my-plugin:rune-key          # CLI
-crunes -p use my-plugin:rune-key arg1     # with positional arg
+crunes -p run my-plugin:rune-key          # CLI
+crunes -p run my-plugin:rune-key arg1     # with positional arg
 ```
 
 In hook tokens (resolved automatically in prompts):

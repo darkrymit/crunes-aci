@@ -90,7 +90,7 @@ export async function args(b) {
     .build()
 }
 
-export async function use(args) {
+export async function run(args) {
   const target = args._[0] ?? '.'
   return section.create('result', {
     type: 'markdown',
@@ -99,13 +99,13 @@ export async function use(args) {
 }
 ```
 
-Templates live in `templates/` and are scaffolded into user projects via `crunes -p template use plugin-name:template-name`. They have the same file structure as runes.
+Templates live in `templates/` and are scaffolded into user projects via `crunes -p template apply plugin-name:template-name`. They have the same file structure as runes.
 
 ## Test locally before publishing
 
 ```bash
 crunes -p plugin install ./<name>         # install from local dir
-crunes -p use <name>:example              # run the example rune
+crunes -p run <name>:example              # run the example rune
 crunes -p plugin list                     # confirm it appears as enabled
 crunes -p plugin uninstall <name>         # clean up after testing
 ```

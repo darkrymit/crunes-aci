@@ -27,19 +27,19 @@ crunes -p docs rune <key>
 ## Run a rune — CLI syntax
 
 ```
-crunes [global-flags] use [--section s1,s2] <key> [rune-args...] [+ [--section s] <key> [rune-args...]]...
+crunes [global-flags] run [--section s1,s2] <key> [rune-args...] [+ [--section s] <key> [rune-args...]]...
 ```
 
 Examples:
 
 ```bash
-crunes -p use docs                              # all sections, plain output
-crunes -p use api v2                            # positional arg "v2"
-crunes -p use -s endpoints api v2               # section filter
-crunes -p use -b docs + api v2                  # batch: two runes in one call (requires -b)
-crunes -p use --format jsonl docs               # structured JSONL event stream (log + section events)
-crunes -p use my-plugin:rune-key                # plugin rune
-crunes -p use my-plugin:rune-key arg1           # plugin rune with arg
+crunes -p run docs                              # all sections, plain output
+crunes -p run api v2                            # positional arg "v2"
+crunes -p run -s endpoints api v2               # section filter
+crunes -p run -b docs + api v2                  # batch: two runes in one call (requires -b)
+crunes -p run --format jsonl docs               # structured JSONL event stream (log + section events)
+crunes -p run my-plugin:rune-key                # plugin rune
+crunes -p run my-plugin:rune-key arg1           # plugin rune with arg
 ```
 
 `--format text` (default) prints tagged headers `[instance:rune:type]` per event.
@@ -47,18 +47,18 @@ crunes -p use my-plugin:rune-key arg1           # plugin rune with arg
 
 ## ⚠️ The Strict 3-Tier Boundary
 `crunes` enforces a strict parsing boundary:
-1. **Global Flags** (e.g. `--cwd`, `-p`) MUST precede `use`.
-2. **Command Flags** (e.g. `-b`, `--format`) MUST immediately follow `use`.
+1. **Global Flags** (e.g. `--cwd`, `-p`) MUST precede `run`.
+2. **Command Flags** (e.g. `-b`, `--format`) MUST immediately follow `run`.
 3. **Rune Args** MUST follow the `<key>`.
 
-Example: `crunes --cwd ./project -p use -b --format json docs`
-*If you place a global flag after `use` (e.g. `crunes use --cwd`), the CLI will instantly throw an error and exit.*
+Example: `crunes --cwd ./project -p run -b --format jsonl docs`
+*If you place a global flag after `run` (e.g. `crunes run --cwd`), the CLI will instantly throw an error and exit.*
 
 `local:<key>` forces resolution from project config only. `plugin:<key>` forces a specific plugin. Bare `<key>` auto-resolves: project config first, then enabled plugins.
 
 ## Hook token syntax
 
-Tokens in the user's prompt are resolved automatically by the `UserPromptSubmit` hook — no manual `crunes use` needed.
+Tokens in the user's prompt are resolved automatically by the `UserPromptSubmit` hook — no manual `crunes run` needed.
 
 ```
 $$key                           all sections
@@ -77,6 +77,6 @@ Args inside `()` are comma-separated. Values containing spaces work naturally: `
 | Situation | Approach |
 |---|---|
 | Token already in the user's prompt | Hook resolves automatically — do nothing |
-| Need live context mid-conversation before planning or coding | `crunes -p use <key>` |
-| Want to inspect structured event stream | `crunes -p use --format jsonl <key>` |
+| Need live context mid-conversation before planning or coding | `crunes -p run <key>` |
+| Want to inspect structured event stream | `crunes -p run --format jsonl <key>` |
 | Unsure what args a rune accepts | `crunes -p docs rune <key>` |

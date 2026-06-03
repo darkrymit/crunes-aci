@@ -118,7 +118,7 @@ function parseRawArgs(str) {
 }
 
 function buildCliArgs(tokens) {
-  const cliArgs = ['use', '--format', 'jsonl']
+  const cliArgs = ['run', '--format', 'jsonl']
   if (tokens.length > 1) {
     cliArgs.push('-b')
   }

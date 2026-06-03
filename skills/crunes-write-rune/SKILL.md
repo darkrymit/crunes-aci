@@ -23,9 +23,9 @@ Creates `.crunes/runes/<key>.js` and registers it in `.crunes/config.json`.
 
 ```bash
 crunes -p template list                              # see available templates
-crunes -p template use <template>                    # copy + register
-crunes -p template use <template> --as <new-key>     # register under different key
-crunes -p template use plugin-name:template-name     # from a specific plugin
+crunes -p template apply <template>                    # copy + register
+crunes -p template apply <template> --as <new-key>     # register under different key
+crunes -p template apply plugin-name:template-name     # from a specific plugin
 ```
 
 ## Rune file structure
@@ -56,7 +56,7 @@ export async function args(b) {
 }
 
 // Required: produce context output
-export async function use(args) {
+export async function run(args) {
   // Parsing is extremely developer friendly:
   // - args.$command     — space-separated matched command path string (e.g. 'remote add')
   // - args.$commands    — array of matched command levels (e.g. ['remote', 'add'])
@@ -86,10 +86,10 @@ crunes -p docs utils                      # all namespaces
 crunes -p docs utils <ns>                 # one namespace (e.g. ws, fs, cache)
 ```
 
-For the `use(args)` lifecycle contract and what `args` contains:
+For the `run(args)` lifecycle contract and what `args` contains:
 
 ```bash
-crunes -p docs use    # use(args) export: args structure, $command, $commands, args._, named params
+crunes -p docs run    # run(args) export: args structure, $command, $commands, args._, named params
 crunes -p docs args   # args(builder) export: option/positional/command declarations
 ```
 
@@ -208,8 +208,8 @@ return null
 ## Test the rune
 
 ```bash
-crunes -p use <key>                    # render output (plain)
-crunes -p use <key> arg1 arg2          # test with args
+crunes -p run <key>                    # render output (plain)
+crunes -p run <key> arg1 arg2          # test with args
 crunes -p check <key>                  # validate output shape
 crunes -p bench <key>                  # check execution time
 ```

@@ -19,7 +19,7 @@ description: Use when orienting yourself in a crunes project — which skill to 
 ```bash
 crunes -p docs rune <key>                 # arg schema + examples (includes file path for local runes)
 crunes -p docs rune <key> <key2>          # multiple runes
-crunes -p docs use                        # how the use(args) export works and what args contains
+crunes -p docs run                        # how the run(args) export works and what args contains
 crunes -p docs args                       # how to declare the args(builder) export
 ```
 
@@ -55,8 +55,8 @@ Available on every `crunes` command:
 | Symptom | Fix |
 |---|---|
 | Don't know what runes exist | `crunes -p list` |
-| Rune output looks wrong | `crunes -p use <key>` to see raw output; `crunes -p check <key>` to validate shape |
+| Rune output looks wrong | `crunes -p run <key>` to see raw output; `crunes -p check <key>` to validate shape |
 | Command not found / unexpected error | `crunes -p doctor` |
 | Want to see a rune's args before calling | `crunes -p docs rune <key>` |
-| Need plain output for piping or AI context | Add `-p` global flag: `crunes -p use <key>` |
+| Need plain output for piping or AI context | Add `-p` global flag: `crunes -p run <key>` |
 | Don't know what `utils.ws` / `utils.fs` functions look like | `crunes -p docs utils ws` |
