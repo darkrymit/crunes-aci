@@ -89,7 +89,7 @@ See [crunes-cli](https://github.com/darkrymit/context-runes-cli) for the full ru
 UserPromptSubmit
   → hook-wrapper.js reads stdin JSON { prompt: "..." }
   → parses `$$key(args)[::sections]` tokens
-  → runs `crunes use <keys...> --format json`
+  → runs `crunes run <keys...> --format json`
   → iterates Section[] JSON output
   → builds <name title="..." ...>content</name> XML per section
   → emits { hookSpecificOutput: { additionalContext: "..." } }

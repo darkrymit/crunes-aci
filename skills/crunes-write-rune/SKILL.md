@@ -1,6 +1,6 @@
 ---
 name: crunes-write-rune
-description: Use when creating a new rune or editing an existing one — scaffolding with crunes create or crunes template use, implementing the rune function, using @utils helpers, or validating output with crunes check.
+description: Use when creating a new rune or editing an existing one — scaffolding with crunes create or crunes template apply, implementing the rune function, using @utils helpers, or validating output with crunes check.
 ---
 
 # Writing Runes
