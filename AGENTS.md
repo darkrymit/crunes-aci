@@ -15,6 +15,7 @@ Before brainstorming, planning, or touching any code:
 ## Rules
 
 - **THIS IS AN INDEPENDENT GIT REPOSITORY** — `crunes-aci` is its own Git repository separate from the monorepo root. **ALL git operations (commits, branches, worktrees, status, diffs) must be run directly inside `crunes-aci/`!**
+- **SEMI-AUTOMATED RELEASE PROCESS** — The release process is semi-automated: bump versions, update changelogs, and stage/tag using the local `release` rune, then manually push tags to origin.
 - **NEVER MODIFY HOOK SCHEMAS WITHOUT DESIGN APPROVAL** — The `hooks/hooks.json` maps `UserPromptSubmit` tokens like `$$key`, `$$key(arg1,arg2)`, and `$$plugin:key` to the `hook-wrapper.js` execution script. Ensure hook signature changes are fully documented and vetted.
 - **ENSURE SANDBOX ENVIRONMENT COMPATIBILITY** — Interactive skills in `skills/` are loaded directly into Claude Code. Ensure they adhere to Claude Code's plugin standards and handle user environments gracefully.
 - **ONLY READ FILES THAT IMPACT IMPLEMENTATION** — Ask "will this file's contents change my implementation approach?" before reading files inside hooks or skills to save token context.
@@ -63,3 +64,35 @@ Transform vague tasks into verifiable goals before starting: "fix the bug" → "
      ```bash
      crunes plugin install
      ```
+
+## Release Process
+
+Releases are semi-automated via the local `release` rune. Navigate to `crunes-aci/` and run:
+
+### View Current Release Context
+```bash
+crunes run release info
+```
+
+### Semi-Automated Release Bump
+Bumps the version in both `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`, then automatically prepends formatted notes to `CHANGELOG.md`:
+```bash
+crunes run release bump patch \
+  -a "Dedicated release rune for ACI version bump and tag automation" \
+  -c "Updated skills to align cache and sqlite handle APIs"
+```
+
+### Standard Version Bump (Manual Changelog Pre-edited)
+If you have already hand-written the custom release notes directly inside `CHANGELOG.md` under the target version header:
+```bash
+crunes run release bump minor
+```
+
+### Semi-Automated Git Staging & Tagging
+Commits all modified release files (changelog, plugin.json, marketplace.json) and sets the appropriate git tag:
+```bash
+crunes run release git
+```
+
+*Publish tags to origin manually once verified: `git push origin main --tags`.*
+
