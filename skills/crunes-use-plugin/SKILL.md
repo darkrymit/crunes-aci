@@ -16,15 +16,13 @@ crunes -p marketplace list                # list configured marketplace source U
 ## Install a plugin
 
 ```bash
-crunes -p plugin install <source>
+crunes -p plugin install <marketplace>@<plugin>
 ```
 
-| Source format | Example |
-|---|---|
-| Local directory | `crunes -p plugin install ./my-plugin` |
-| GitHub shorthand | `crunes -p plugin install owner/repo` |
-| Git URL | `crunes -p plugin install https://github.com/owner/repo.git` |
-| npm package | `crunes -p plugin install my-package` |
+Example:
+```bash
+crunes -p plugin install official@git-helper
+```
 
 Install adds the plugin to the global registry (`~/.crunes/plugins.json`) and enables it in `.crunes/config.json` for the current project. You will be prompted to review and consent to the plugin's declared permissions.
 

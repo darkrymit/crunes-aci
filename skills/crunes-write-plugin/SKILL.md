@@ -68,14 +68,17 @@ Located at `.crunes-plugin/plugin.json` (not the repo root — the validator loo
 
 Declared per-rune in `plugin.json`. Adding a new rune to an existing plugin counts as a new permission grant and triggers user re-consent.
 
-| Permission | Meaning |
-|---|---|
-| `fs.read:./**` | Read any file under the project root |
-| `fs.read:@plugin/**` | Read files in the plugin's own directory (always auto-granted) |
-| `fs.write:./**` | Write files under the project root |
-| `shell.run:<cmd-prefix>` | Run shell commands matching the given prefix |
-| `fetch` | Make HTTP requests |
-| `env.get` | Read environment variables |
+Supported permissions:
+- **`fs.read:<path-pattern>`**: Read files under the matched path (e.g. `fs.read:./**` or `fs.read:@plugin/**`).
+- **`fs.write:<path-pattern>`**: Write files under the matched path (e.g. `fs.write:./**`).
+- **`shell.run:<cmd-prefix>`**: Run shell commands matching the given prefix.
+- **`http.fetch:<method-and-url-pattern>`**: Make HTTP requests (e.g. `http.fetch:GET::https://api.github.com/**` or wildcard `http.fetch:**`).
+- **`env.read:<source>::<key-pattern>`**: Read environment variables (e.g. `env.read:process::GITHUB_TOKEN` or wildcard `env.read:**`).
+- **`sqlite.read:<path-pattern>` / `sqlite.write:<path-pattern>`**: Read or write to SQLite databases (e.g. `sqlite.read:./db/**`).
+- **`cache.read:<path-pattern>` / `cache.write:<path-pattern>`**: Read or write to cache buckets.
+- **`ws.client:<url-pattern>`**: Connect as a WebSocket client to matching URLs.
+- **`ws.server:<host-port-path>`**: Bind/run a WebSocket server.
+- **`http.server:<host-port>`**: Bind/run an HTTP server.
 
 ## Rune files inside a plugin
 

@@ -7,18 +7,21 @@ description: Use when orienting yourself in a crunes project — which skill to 
 
 ## Which skill to use
 
-| I want to… | Skill |
-|---|---|
-| See what runes exist / fetch rune output | `crunes-use-rune` |
-| Create or edit a rune | `crunes-write-rune` |
-| Install a plugin or use runes from a plugin | `crunes-use-plugin` |
-| Build and publish a plugin | `crunes-write-plugin` |
+- **To see what runes exist or fetch/consume rune output**: Use the `crunes-use-rune` skill.
+- **To create or edit a rune**: Use the `crunes-write-rune` skill.
+- **To install a plugin or use runes from a plugin**: Use the `crunes-use-plugin` skill.
+- **To build and publish a plugin**: Use the `crunes-write-plugin` skill.
 
-## Inspect a rune's API before calling it
+## Inspect a rune's CLI arguments
 
 ```bash
 crunes -p docs rune <key>                 # arg schema + examples (includes file path for local runes)
 crunes -p docs rune <key> <key2>          # multiple runes
+```
+
+## Learn about developer exports (run & args)
+
+```bash
 crunes -p docs run                        # how the run(args) export works and what args contains
 crunes -p docs args                       # how to declare the args(builder) export
 ```
@@ -43,20 +46,16 @@ crunes -p doctor    # checks Node version, config presence, plugin registry inte
 
 Available on every `crunes` command:
 
-| Flag | Meaning |
-|---|---|
-| `-p, --plain` | No ANSI — plain text, optimised for AI/pipe use |
-| `-y, --yes` | Skip all interactive prompts (auto-detected in non-TTY environments too) |
-| `--cwd <path>` | Override the project root |
-| `--verbose` | Full stack traces and debug output |
+- **`-p, --plain`**: Plain output: no ANSI colors, box-drawing characters, or fancy symbols (optimized for AI/pipe use).
+- **`-y, --yes`**: Assume yes to all prompts and skip interactive mode (also auto-detected in non-TTY environments).
+- **`--cwd <path>`**: Project root to use instead of the current working directory.
+- **`--verbose`**: Print full error stack traces and other verbose output.
 
 ## Common troubleshooting
 
-| Symptom | Fix |
-|---|---|
-| Don't know what runes exist | `crunes -p list` |
-| Rune output looks wrong | `crunes -p run <key>` to see raw output; `crunes -p check <key>` to validate shape |
-| Command not found / unexpected error | `crunes -p doctor` |
-| Want to see a rune's args before calling | `crunes -p docs rune <key>` |
-| Need plain output for piping or AI context | Add `-p` global flag: `crunes -p run <key>` |
-| Don't know what `utils.ws` / `utils.fs` functions look like | `crunes -p docs utils ws` |
+- **If you don't know what runes exist**: Run `crunes -p list`.
+- **If rune output looks wrong**: Run `crunes -p run <key>` to see raw output, or run `crunes -p check <key>` to validate its shape.
+- **If you get a "command not found" or unexpected error**: Run `crunes -p doctor`.
+- **If you want to see a rune's arguments before calling it**: Run `crunes -p docs rune <key>`.
+- **If you need plain output for piping or AI context**: Add the `-p` global flag (e.g. `crunes -p run <key>`).
+- **If you don't know what `utils.ws` or `utils.fs` (etc.) functions look like**: Run `crunes -p docs utils <namespace>` (e.g. `crunes -p docs utils ws`).
