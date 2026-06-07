@@ -107,8 +107,8 @@ crunes -p docs args   # args(builder) export: option/positional/command declarat
 - **`yaml`**: `yaml.read(path)` · `yaml.write(path, data)` · `yaml.modify(path, fn)`
 - **`xml`**: `xml.read(path)` · `xml.write(path, data)` · `xml.modify(path, fn)`
 - **`shell`**: `shell.exec(cmd, { throw?, trim?, timeout?, env?, binary?, stdin? })` → `ShellResult` (destructure `{ stdout }` to capture the output string) · `shell.spawn(cmd, { env?, signal? })` → `ShellSession` · `shell.job.start(cmd, opts?)` → `{ id }` — detached background shell with log-backed I/O
-- **`cache`**: `cache.open(location, name?)` — returns `CacheHandle` with `set(key, value, ttl?)`, `get(key)`, `delete(key)`, `clear()`
-- **`sqlite`**: `sqlite.open(location, name?)` — returns `SqliteHandle` with `query/get/exec/transaction/close`
+- **`cache`**: `cache.open(location, name?)` — returns `CacheHandle` with `set(key, value, ttl?)`, `get(key)`, `has(key)`, `delete(key)`, `clear()`
+- **`sqlite`**: `sqlite.open(location, name?)` — returns `SqliteHandle` with `query(sql, params?)`, `get(sql, params?)`, `exec(sql, params?)`, `run(sql)`, `close()`
 - **`archive`**: `archive.unzip(src, dest)` · `archive.zip(src, dest)` · `archive.untar(src, dest, {gzip?})` · `archive.tar(src, dest, {gzip?})` — `tar` defaults to `gzip:true`; `untar` auto-detects compression
 - **`crypto`**: `crypto.uuid()` · `crypto.randomHex(size)` · `crypto.randomBase64(size)` · `crypto.hash(algo, data)` · `crypto.hashAsHex(algo, data)` · `crypto.hashAsBase64(algo, data)` · `crypto.hmac(algo, key, data)` · `crypto.hmacAsHex(algo, key, data)` · `crypto.hmacAsBase64(algo, key, data)` · `crypto.encrypt(algo, key, iv, data)` · `crypto.decrypt(algo, key, iv, cipher)` · `crypto.toHex(data)` · `crypto.fromHex(hex)` · `crypto.toBase64(data)` · `crypto.fromBase64(b64)`
 
