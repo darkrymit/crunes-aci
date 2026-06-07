@@ -95,6 +95,9 @@ async function runBump(args) {
     throw new Error('⚠ Missing required positional argument: <type> (major, minor, patch, or explicit version)')
   }
 
+  console.log('⚡ Running test suite before release bump...')
+  await shell.exec('node scripts/hook-wrapper.test.js')
+
   const currentVersion = await json.readPath('.claude-plugin/plugin.json', '$.version', '')
   if (!currentVersion) {
     throw new Error('⚠ Could not read current version from .claude-plugin/plugin.json')
