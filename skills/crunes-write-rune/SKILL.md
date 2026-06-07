@@ -60,7 +60,8 @@ export async function run(args) {
   // Parsing is extremely developer friendly:
   // - args.$command     — space-separated matched command path string (e.g. 'remote add')
   // - args.$commands    — array of matched command levels (e.g. ['remote', 'add'])
-  // - args._            — data positionals only (command tokens stripped)
+  // - args._            — all data positionals (command tokens stripped)
+  // - args.$rest        — data positionals not mapped to named parameters
   // - args.name         — automatically mapped positional parameter '<name>'
   // - args.url          — automatically mapped positional parameter '<url>'
   // - args.verbose      — boolean option parsed from the root command
