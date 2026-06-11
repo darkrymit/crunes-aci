@@ -1,6 +1,8 @@
 'use strict'
 
 const { spawnSync } = require('child_process')
+const fs   = require('node:fs')
+const path = require('node:path')
 
 // ─── Pure functions (exported for testing) ────────────────────────────────────
 
@@ -135,6 +137,53 @@ function buildCliArgs(tokens) {
   return cliArgs
 }
 
+// ─── Batch permission helpers ─────────────────────────────────────────────────
+
+function globMatch(pattern, str) {
+  const re = new RegExp(
+    '^' + pattern.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$'
+  )
+  return re.test(str)
+}
+
+function globMatchAny(patterns, str) {
+  return patterns.some(p => globMatch(p, str))
+}
+
+function readMergedBatchConfig(shared, local) {
+  const sharedRunes = shared.runes ?? {}
+  const localRunes  = local.runes  ?? {}
+  const merged = { ...sharedRunes }
+  for (const [key, localEntry] of Object.entries(localRunes)) {
+    const sharedEntry = sharedRunes[key]
+    if (sharedEntry && typeof sharedEntry === 'object' && typeof localEntry === 'object') {
+      merged[key] = { ...sharedEntry, ...localEntry }
+    } else {
+      merged[key] = localEntry
+    }
+  }
+  return merged
+}
+
+function checkBatch(tokens, runeEntries) {
+  for (const { key, rawArgs } of tokens) {
+    const entry = runeEntries[key] ?? {}
+    const parsedArgs = rawArgs ? parseRawArgs(rawArgs) : []
+    const matchString = parsedArgs.length > 0 ? `${key} ${parsedArgs.join(' ')}` : key
+    // Strip leading key for pattern evaluation (patterns match args portion)
+    const spaceIdx = matchString.indexOf(' ')
+    const subject = spaceIdx === -1 ? matchString : matchString.slice(spaceIdx + 1)
+    const batch = entry.batch
+    if (!batch) return `Batch not permitted for "${matchString}". Add a batch.allow pattern in config.json or run it separately.`
+    const deny  = batch.deny  ?? []
+    const allow = batch.allow ?? []
+    if (deny.length > 0 && globMatchAny(deny, subject))  return `Batch not permitted for "${matchString}". Matches a deny pattern.`
+    if (allow.length > 0 && globMatchAny(allow, subject)) continue
+    return `Batch not permitted for "${matchString}". No matching allow pattern.`
+  }
+  return null
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 function main(raw) {
@@ -151,6 +200,20 @@ function main(raw) {
   if (tokens.length === 0) {
     emit('')
     return
+  }
+
+  if (tokens.length > 1) {
+    let shared = {}
+    let local  = {}
+    const cwd = process.cwd()
+    try { shared = JSON.parse(fs.readFileSync(path.join(cwd, '.crunes', 'config.json'), 'utf8')) } catch {}
+    try { local  = JSON.parse(fs.readFileSync(path.join(cwd, '.crunes', 'config.local.json'), 'utf8')) } catch {}
+    const runeEntries = readMergedBatchConfig(shared, local)
+    const batchError = checkBatch(tokens, runeEntries)
+    if (batchError) {
+      emit(`[crunes] ${batchError}`)
+      return
+    }
   }
 
   const cliArgs = buildCliArgs(tokens)
@@ -260,4 +323,4 @@ if (require.main === module) {
   })
 }
 
-module.exports = { parseTokens, buildCliArgs, parseRawArgs }
+module.exports = { parseTokens, buildCliArgs, parseRawArgs, checkBatch, readMergedBatchConfig }
