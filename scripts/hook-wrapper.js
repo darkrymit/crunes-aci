@@ -129,6 +129,7 @@ function buildCliArgs(tokens) {
     const { key, rawArgs, rawSections } = tokens[i]
     if (rawSections) cliArgs.push('--section', rawSections)
     cliArgs.push(key)
+    cliArgs.push('--')
     if (rawArgs) {
       const args = parseRawArgs(rawArgs)
       cliArgs.push(...args)
