@@ -69,14 +69,14 @@ Located at `.crunes-plugin/plugin.json` (not the repo root — the validator loo
 Declared per-rune in `plugin.json`. Adding a new rune to an existing plugin counts as a new permission grant and triggers user re-consent.
 
 Supported permissions:
-- **`fs.read:<path-pattern>`**: Read files under the matched path (e.g. `fs.read:./**` or `fs.read:@plugin/**`).
-- **`fs.write:<path-pattern>`**: Write files under the matched path (e.g. `fs.write:./**`).
-- **`shell.run:<cmd-prefix>`**: Run shell commands matching the given prefix.
-- **`http.fetch:<method-and-url-pattern>`**: Make HTTP requests (e.g. `http.fetch:GET::https://api.github.com/**` or wildcard `http.fetch:**`).
-- **`env.read:<source>::<key-pattern>`**: Read environment variables (e.g. `env.read:process::GITHUB_TOKEN` or wildcard `env.read:**`).
-- **`sqlite.read:<path-pattern>` / `sqlite.write:<path-pattern>`**: Read or write to SQLite databases (e.g. `sqlite.read:./db/**`).
-- **`cache.read:<path-pattern>` / `cache.write:<path-pattern>`**: Read or write to cache buckets.
-- **`ws.client:<url-pattern>`**: Connect as a WebSocket client to matching URLs.
+- **`fs.read:<path-pattern>`**: Read files under the matched path (e.g. `fs.read:./**` or `fs.read:@plugin/**`). `*` matches within a path segment; `**` spans segments.
+- **`fs.write:<path-pattern>`**: Write files under the matched path (e.g. `fs.write:./**`). Same glob semantics as `fs.read`.
+- **`shell.run:<cmd-pattern>`**: Run shell commands matching the pattern. `*` matches any characters including `/`, spaces, and args — e.g. `shell.run:bash *` permits `bash ./run.sh --profile=dev,staging`.
+- **`http.fetch:<method-and-url-pattern>`**: Make HTTP requests (e.g. `http.fetch:GET::https://api.github.com/**` or wildcard `http.fetch:**`). In the URL, `*` matches within a path segment and `**` spans segments.
+- **`env.read:<source>::<key-pattern>`**: Read environment variables (e.g. `env.read:process::GITHUB_TOKEN` or `env.read:process::GITHUB_*`). `*` matches any characters in the key name.
+- **`sqlite.read:<path-pattern>` / `sqlite.write:<path-pattern>`**: Read or write to SQLite databases. Path part uses glob semantics (`*` within segment, `**` across). Name part (after `::`) uses flat wildcard (`*` matches anything).
+- **`cache.read:<path-pattern>` / `cache.write:<path-pattern>`**: Read or write to cache buckets. Same dual semantics as sqlite.
+- **`ws.client:<url-pattern>`**: Connect as a WebSocket client to matching URLs. `*` matches within a path segment; `**` spans segments.
 - **`ws.server:<host-port-path>`**: Bind/run a WebSocket server.
 - **`http.server:<host-port>`**: Bind/run an HTTP server.
 

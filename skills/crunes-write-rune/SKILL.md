@@ -35,6 +35,10 @@ Rune files are ESM modules. All I/O goes through `@utils` — no Node.js builtin
 ```js
 import { fs, md, tree, section, env, vars, rune, http, ws, json, yaml, xml, shell, cache, sqlite, archive, crypto } from '@utils'
 
+// Optional: cleanup after run() resolves or throws (close connections, release handles)
+// Errors thrown here are swallowed.
+export async function dispose() {}
+
 // Optional: declare the args schema
 export async function args(b) {
   return b
@@ -77,6 +81,18 @@ export async function run(args) {
 ```
 
 If `args()` is omitted, `args._` contains the positional strings passed to the rune (command tokens are always stripped).
+
+## Globals (no import needed)
+
+These are injected into every rune sandbox automatically:
+
+- **`logger`**: `logger.info(message, meta?)` · `logger.warn(message, meta?)` · `logger.error(message, meta?)` · `logger.debug(message, meta?)` — emits `{ type: 'log', level, message, meta? }` events. In text mode these write to stderr; in JSONL mode they appear as JSON on stdout. The optional `meta` is a plain object.
+- **`console`**: `console.log(...)` · `console.warn(...)` · `console.error(...)` — same unified `{ type: 'log', level }` event shape, without `meta`.
+- **`fetch(url, init?)`** — same as `http.fetch()`, available globally.
+- **Timers**: `setTimeout`, `clearTimeout`, `setInterval`, `clearInterval`
+- **Encoding**: `TextEncoder`, `TextDecoder`
+- **Streams**: `ReadableStream`, `WritableStream`, `TransformStream`
+- **Web types**: `Blob`, `Headers`, `FormData`, `URLSearchParams`, `Request`, `Response`, `AbortController`, `AbortSignal`
 
 ## `@utils` reference
 
