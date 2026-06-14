@@ -16,7 +16,7 @@ Before brainstorming, planning, or touching any code:
 
 - **THIS IS AN INDEPENDENT GIT REPOSITORY** — `crunes-aci` is its own Git repository separate from the monorepo root. **ALL git operations (commits, branches, worktrees, status, diffs) must be run directly inside `crunes-aci/`!**
 - **SEMI-AUTOMATED RELEASE PROCESS** — The release process is semi-automated: bump versions, update changelogs, and stage/tag using the local `release` rune, then manually push tags to origin.
-- **NEVER MODIFY HOOK SCHEMAS WITHOUT DESIGN APPROVAL** — The `hooks/hooks.json` maps `UserPromptSubmit` tokens like `$$key`, `$$key(arg1,arg2)`, and `$$plugin:key` to the `hook-wrapper.js` execution script. Ensure hook signature changes are fully documented and vetted.
+- **NEVER MODIFY HOOK SCHEMAS WITHOUT DESIGN APPROVAL** — The `hooks/hooks.json` maps `UserPromptSubmit` tokens like `$$key`, `$$key(arg1,arg2)`, `$$key[-s section]`, and `$$plugin:key` to the `hook-wrapper.js` execution script. Ensure hook signature changes are fully documented and vetted.
 - **ENSURE SANDBOX ENVIRONMENT COMPATIBILITY** — Interactive skills in `skills/` are loaded directly into Claude Code. Ensure they adhere to Claude Code's plugin standards and handle user environments gracefully.
 - **ONLY READ FILES THAT IMPACT IMPLEMENTATION** — Ask "will this file's contents change my implementation approach?" before reading files inside hooks or skills to save token context.
 
@@ -45,8 +45,8 @@ Transform vague tasks into verifiable goals before starting: "fix the bug" → "
    * Resolves specific context injection tokens before the prompt is sent to the LLM:
      * `$$key` (e.g. `$$release`)
      * `$$key(arg1,arg2)` (e.g. `$$m(rune)`)
-     * `$$key::section` (e.g. `$$release::info`)
-     * `$$plugin:key(args)::section`
+     * `$$key[-s section]` (e.g. `$$release[-s info]`)
+     * `$$plugin:key(args)[-s section]`
    * Executes the local `crunes` CLI in a subprocess and formats its console output as structured XML contexts injected seamlessly into the user prompt.
 2. **Skills (`skills/`):**
    * Standalone markdown and JS-defined tools (e.g. `crunes-help`, `crunes-use-rune`, `crunes-write-rune`) that can be invoked during Claude Code conversations to execute runes or get active plugin capabilities.

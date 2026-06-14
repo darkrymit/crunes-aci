@@ -45,7 +45,6 @@ crunes list                            # what runes exist in this project
 crunes docs rune <key>                 # args schema + examples for a rune
 crunes docs utils                      # list all @utils namespaces
 crunes docs utils <ns>                 # function signatures for one namespace (e.g. ws, fs, cache)
-crunes docs utils <ns> --format json   # machine-readable, for code generation
 crunes doctor                          # verify environment health
 ```
 
@@ -67,10 +66,10 @@ Token syntax:
 |---|---|
 | `$$key` | All sections |
 | `$$key(arg1,arg2)` | With positional args |
-| `$$key::section1,section2` | Section filter |
-| `$$key(arg1)::section` | Args + section filter |
+| `$$key[-s s1,s2]` | Section filter |
+| `$$key[-s s1,s2](arg1)` | Args + section filter |
 | `$$my-plugin:rune-key` | Plugin rune |
-| `$$my-plugin:rune-key(arg)::sec` | Plugin rune, args + section |
+| `$$my-plugin:rune-key[-s sec](arg)` | Plugin rune, args + section |
 
 ## Project Setup
 
@@ -88,7 +87,7 @@ See [crunes-cli](https://github.com/darkrymit/context-runes-cli) for the full ru
 ```
 UserPromptSubmit
   → hook-wrapper.js reads stdin JSON { prompt: "..." }
-  → parses `$$key(args)[::sections]` tokens
+  → parses `$$key[-s sections](args)` tokens
   → runs `crunes run <keys...> --format json`
   → iterates Section[] JSON output
   → builds <name title="..." ...>content</name> XML per section
