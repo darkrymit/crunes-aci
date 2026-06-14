@@ -1,6 +1,6 @@
 ---
 name: crunes-write-rune
-description: Use when creating a new rune or editing an existing one — scaffolding with crunes create or crunes template apply, implementing the rune function, using @utils helpers, or validating output with crunes check.
+description: Use when creating a new rune or editing an existing one — scaffolding with crunes create or crunes template apply, implementing the rune function, using @utils helpers, or inspecting the output with crunes docs rune.
 ---
 
 # Writing Runes
@@ -78,6 +78,11 @@ export async function run(args) {
     })
   }
 }
+
+// Zero-effort help handling (help is a sandbox global — no import needed):
+// export async function run(args) {
+//   if (args.help) return help.section()
+// }
 ```
 
 If `args()` is omitted, `args._` contains the positional strings passed to the rune (command tokens are always stripped).
@@ -114,6 +119,7 @@ crunes -p docs args   # args(builder) export: option/positional/command declarat
 - **`md`**: `md.h1/h2/h3(text)` · `md.bold(text)` · `md.italic(text)` · `md.code(text)` · `md.codeBlock(text, lang?)` · `md.ul(items)` · `md.ol(items)` · `md.p(text)` · `md.table(headers, rows)` · `md.link(text, url)` · `md.blockquote(text)`
 - **`tree`**: `tree.node(name, description, children?)` · `tree.format(root, { style? })`
 - **`section`**: `section.create(name, data, opts?)` · `section.emit(section)` — stream section before return · `section.match(name, patterns[])` · `section.selected()`
+- **`help`**: `help.section()` → returns a `Section` named `"help"` rendered from the rune's `args(builder)` schema · `help.text()` → same content as a raw string for custom composition
 - **`env`**: `env.read(key, fallback?)` · `env.has(key)`
 - **`vars`**: `vars.read(key, fallback?)` · `vars.has(key)` — reads rune config vars
 - **`rune`**: `rune.exec(key, args[])` → `RuneResult` — call another rune and get its output · `rune.job.start(key, args[])` → `{ id }` — launch as background job · `rune.job.kill(id)` · `rune.job.exists(id)` → `boolean` · `rune.job.stdout(id)` / `rune.job.stderr(id)` — read log output · `rune.job.sections(id)` → `Section[]`
@@ -223,6 +229,6 @@ return null
 ```bash
 crunes -p run <key>                    # render output (plain)
 crunes -p run <key> arg1 arg2          # test with args
-crunes -p check <key>                  # validate output shape
 crunes -p bench <key>                  # check execution time
+crunes -p docs rune <key>              # inspect args schema
 ```
