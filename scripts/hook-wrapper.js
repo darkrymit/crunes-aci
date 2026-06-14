@@ -6,7 +6,7 @@ const path = require('node:path')
 
 // ─── Pure functions (exported for testing) ────────────────────────────────────
 
-// Matches: $key  $key(args)  $key::sections  $key(args)::sections
+// Matches: $$key  $$key[-s section](args)  $$key(args)  $$key[-s section]
 // key may contain a single colon for plugin namespacing (my-plugin:rune-key)
 // Key must start with a lowercase letter [a-z].
 function parseTokens(prompt) {
@@ -16,7 +16,7 @@ function parseTokens(prompt) {
     if (prompt[i] === '$' && i + 1 < prompt.length && prompt[i + 1] === '$' && i + 2 < prompt.length && /[a-z]/.test(prompt[i + 2])) {
       const startIdx = i
       i += 2 // skip '$$'
-      
+
       let key = ''
       while (i < prompt.length) {
         const char = prompt[i]
@@ -24,9 +24,7 @@ function parseTokens(prompt) {
           key += char
           i++
         } else if (char === ':') {
-          if (i + 1 < prompt.length && prompt[i + 1] === ':') {
-            break
-          }
+          if (i + 1 < prompt.length && prompt[i + 1] === ':') break
           key += char
           i++
         } else {
@@ -38,22 +36,29 @@ function parseTokens(prompt) {
         i = startIdx + 1
         continue
       }
-      
+
+      // Parse optional [...] bracket block
+      let rawBracket = ''
+      if (i < prompt.length && prompt[i] === '[') {
+        i++ // skip '['
+        while (i < prompt.length && prompt[i] !== ']') {
+          rawBracket += prompt[i]
+          i++
+        }
+        if (i < prompt.length) i++ // skip ']'
+      }
+
+      // Parse optional (...) args block
       let rawArgs = ''
       if (i < prompt.length && prompt[i] === '(') {
         i++ // skip '('
         let parenCount = 1
-        let argStart = i
+        const argStart = i
         while (i < prompt.length && parenCount > 0) {
           const char = prompt[i]
-          if (char === '(') {
-            parenCount++
-          } else if (char === ')') {
-            parenCount--
-          }
-          if (parenCount > 0) {
-            i++
-          }
+          if (char === '(') parenCount++
+          else if (char === ')') parenCount--
+          if (parenCount > 0) i++
         }
         if (parenCount === 0) {
           rawArgs = prompt.substring(argStart, i)
@@ -63,21 +68,8 @@ function parseTokens(prompt) {
           continue
         }
       }
-      
-      let rawSections = ''
-      if (i + 1 < prompt.length && prompt[i] === ':' && prompt[i + 1] === ':') {
-        i += 2
-        while (i < prompt.length) {
-          const char = prompt[i]
-          if (/\s|\$/.test(char)) {
-            break
-          }
-          rawSections += char
-          i++
-        }
-      }
-      
-      tokens.push({ key, rawArgs, rawSections })
+
+      tokens.push({ key, rawBracket, rawArgs })
     } else {
       i++
     }
@@ -121,19 +113,13 @@ function parseRawArgs(str) {
 
 function buildCliArgs(tokens) {
   const cliArgs = ['run', '--format', 'jsonl']
-  if (tokens.length > 1) {
-    cliArgs.push('-b')
-  }
+  if (tokens.length > 1) cliArgs.push('-b')
   for (let i = 0; i < tokens.length; i++) {
     if (i > 0) cliArgs.push('+')
-    const { key, rawArgs, rawSections } = tokens[i]
-    if (rawSections) cliArgs.push('--section', rawSections)
-    cliArgs.push(key)
-    cliArgs.push('--')
-    if (rawArgs) {
-      const args = parseRawArgs(rawArgs)
-      cliArgs.push(...args)
-    }
+    const { key, rawBracket, rawArgs } = tokens[i]
+    const keyToken = rawBracket ? `${key}[${rawBracket}]` : key
+    cliArgs.push(keyToken)
+    if (rawArgs) cliArgs.push(...parseRawArgs(rawArgs))
   }
   return cliArgs
 }
@@ -325,3 +311,4 @@ if (require.main === module) {
 }
 
 module.exports = { parseTokens, buildCliArgs, parseRawArgs, checkBatch, readMergedBatchConfig }
+
