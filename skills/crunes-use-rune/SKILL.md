@@ -33,28 +33,32 @@ crunes -p docs args                       # how to declare the args(builder) exp
 ## Run a rune — CLI syntax
 
 ```
-crunes [global-flags] run [--section s1,s2] <key> [rune-args...] [+ [--section s] <key> [rune-args...]]...
+crunes [global-flags] run <key>[-s s1,s2] [rune-args...]
 ```
+
+Section filter and other per-rune flags go inside `[...]` attached to the key. Global run flags (`--format`, `-b`, `--fail-fast`) go before the key.
 
 Examples:
 
 ```bash
 crunes -p run docs                              # all sections, plain output
 crunes -p run api v2                            # positional arg "v2"
-crunes -p run -s endpoints api v2               # section filter
-crunes -p run -b docs + api v2                  # batch: two runes in one call (requires -b)
+crunes -p run api[-s endpoints] v2              # section filter + arg
+crunes -p run api[--section endpoints]          # section filter, long form
+crunes -p run --format jsonl api[-s endpoints]  # jsonl output
+crunes -p run -b docs + api[-s endpoints] v2    # batch: two runes in one call (requires -b)
 crunes -p run my-plugin:rune-key                # plugin rune
-crunes -p run my-plugin:rune-key arg1           # plugin rune with arg
+crunes -p run my-plugin:rune-key[-s foo] arg1   # plugin rune with section + arg
 ```
 
 ## ⚠️ The Strict 3-Tier Boundary
 `crunes` enforces a strict parsing boundary:
 1. **Global Flags** (e.g. `--cwd`, `-p`) MUST precede `run`.
-2. **Command Flags** (e.g. `-b`) MUST immediately follow `run`.
-3. **Rune Args** MUST follow the `<key>`.
+2. **Command Flags** (e.g. `-b`, `--format`, `--fail-fast`) MUST immediately follow `run`.
+3. **Per-Rune Bracket Flags** (e.g. `-s section`) go inside `key[...]`.
+4. **Rune Args** follow the key token.
 
-Example: `crunes --cwd ./project -p run -b docs`
-*If you place a global flag after `run` (e.g. `crunes run --cwd`), the CLI will instantly throw an error and exit.*
+Example: `crunes --cwd ./project -p run --format jsonl api[-s endpoints] v2`
 
 `local:<key>` forces resolution from project config only. `plugin:<key>` forces a specific plugin. Bare `<key>` auto-resolves: project config first, then enabled plugins.
 
@@ -63,14 +67,15 @@ Example: `crunes --cwd ./project -p run -b docs`
 Tokens in the user's prompt are resolved automatically by the `UserPromptSubmit` hook — no manual `crunes run` needed.
 
 ```
-$$key                           all sections
-$$key(arg1,arg2)                positional args (comma-separated)
-$$key::section1,section2        section filter
-$$key(arg1,arg2)::section       args + section filter
-$$my-plugin:rune-key             plugin rune
-$$my-plugin:rune-key(arg1)       plugin rune with arg
-$$my-plugin:rune-key(arg)::sec   plugin rune, args + section filter
+$$key                              all sections, no args
+$$key[-s s1,s2]                    section filter
+$$key(arg1,arg2)                   positional args (comma-separated)
+$$key[-s s1,s2](arg1,arg2)         section filter + args
+$$my-plugin:rune-key               plugin rune
+$$my-plugin:rune-key[-s foo](arg1) plugin rune with section filter + arg
 ```
+
+Section filter uses `-s` (short) or `--section` (long) inside `[...]`. The `::section` syntax is no longer supported.
 
 Args inside `()` are comma-separated. Values containing spaces work naturally: `$$search(hello world,src)` passes `hello world` as the first arg and `src` as the second.
 
@@ -78,5 +83,5 @@ Args inside `()` are comma-separated. Values containing spaces work naturally: `
 
 - **If the token is already in the user's prompt**: The hook resolves automatically — you do nothing.
 - **If you need live context mid-conversation before planning or coding**: Run `crunes -p run <key>`.
-- **If you want to inspect a structured event stream**: Run `crunes -p run --format jsonl <key>`.
+- **If you want to inspect a structured event stream**: Run `crunes -p run --format jsonl <key>[-s section]`.
 - **If you are unsure what arguments a rune accepts**: Run `crunes -p docs rune <key>`.
