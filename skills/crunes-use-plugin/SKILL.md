@@ -51,8 +51,8 @@ In hook tokens (resolved automatically in prompts):
 ```
 $$my-plugin:rune-key
 $$my-plugin:rune-key(arg1,arg2)
-$$my-plugin:rune-key::section
-$$my-plugin:rune-key(arg1)::section
+$$my-plugin:rune-key[-s section]
+$$my-plugin:rune-key[-s section](arg1)
 ```
 
 ## Permission model

@@ -19,22 +19,24 @@ crunes -p docs rune <key>                 # arg schema + examples (includes file
 crunes -p docs rune <key> <key2>          # multiple runes
 ```
 
-## Learn about developer exports (run & args)
+## Learn about developer exports
 
 ```bash
-crunes -p docs run                        # how the run(args) export works and what args contains
-crunes -p docs args                       # how to declare the args(builder) export
+crunes -p docs run          # how the run(args) export works and what args contains
+crunes -p docs args         # how to declare the args(builder) export
+crunes -p docs run-repl     # run-repl lifecycle: runRepl, inputRepl, bannerRepl, commandsRepl, etc.
+crunes -p docs args-repl    # how to declare the argsRepl(builder) export
 ```
 
 ## Query utils.* API docs
 
 ```bash
-crunes -p docs utils                      # list all 19 namespaces with one-line descriptions
+crunes -p docs utils                      # list all namespaces with one-line descriptions
 crunes -p docs utils <ns>                 # full function signatures for one namespace
 crunes -p docs utils <ns1> <ns2>          # multiple namespaces
 ```
 
-Available namespaces: `archive` `cache` `codec` `crypto` `env` `fs` `http` `json` `md` `rune` `section` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
+Available namespaces: `archive` `cache` `codec` `crypto` `env` `fs` `help` `http` `json` `md` `rune` `section` `shell` `sqlite` `time` `tree` `vars` `ws` `xml` `yaml`
 
 ## Verify the environment
 
@@ -59,3 +61,4 @@ Available on every `crunes` command:
 - **If you want to see a rune's arguments before calling it**: Run `crunes -p docs rune <key>`.
 - **If you need plain output for piping or AI context**: Add the `-p` global flag (e.g. `crunes -p run <key>`).
 - **If you don't know what `utils.ws` or `utils.fs` (etc.) functions look like**: Run `crunes -p docs utils <namespace>` (e.g. `crunes -p docs utils ws`).
+- **If you need to understand the run-repl lifecycle exports**: Run `crunes -p docs run-repl`.
