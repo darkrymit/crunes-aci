@@ -54,7 +54,7 @@ Available on every `crunes` command:
 ## Common troubleshooting
 
 - **If you don't know what runes exist**: Run `crunes -p list`.
-- **If rune output looks wrong**: Run `crunes -p run <key>` to see raw output, or run `crunes -p check <key>` to validate its shape.
+- **If rune output looks wrong**: Run `crunes -p run <key>` to see raw output, or run `crunes -p docs rune <key>` to inspect its args schema.
 - **If you get a "command not found" or unexpected error**: Run `crunes -p doctor`.
 - **If you want to see a rune's arguments before calling it**: Run `crunes -p docs rune <key>`.
 - **If you need plain output for piping or AI context**: Add the `-p` global flag (e.g. `crunes -p run <key>`).
