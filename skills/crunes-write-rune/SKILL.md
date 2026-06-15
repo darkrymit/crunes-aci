@@ -86,7 +86,7 @@ export async function run(args) {
 
 If `args()` is omitted, `args._` contains the positional strings passed to the rune (command tokens are always stripped).
 
-## Rune file structure — `run-repl` mode
+## Rune file structure — `repl` mode
 
 Interactive REPL runes keep the isolate alive across inputs. Module-level variables are session state.
 
@@ -96,25 +96,25 @@ import { sqlite, section, md, help } from '@utils'
 let db = null
 
 // Optional: separate args schema for the REPL session.
-// Does NOT fall back to args() if absent — runRepl(args) receives an empty args object.
+// Does NOT fall back to args() if absent — repl(args) receives an empty args object.
 export async function argsRepl(b) {
   return b
     .option('--db <path>', 'Database path', './state')
     .option('--help', 'Show help')
-    .example('crunes run-repl my-rune', 'Start session')
+    .example('crunes repl my-rune', 'Start session')
     .build()
 }
 
 // Session initializer. Called once at start. Opens connections, sets up state.
 // Returns the initial prompt string (default: "> ").
-// Requires a separate "runRepl" permission block in config.json — does not inherit "run".
-export async function runRepl(args) {
+// Requires a separate "repl" permission block in config.json — does not inherit "run".
+export async function repl(args) {
   if (args.help) return help.section()
   db = await sqlite.open(args.db, 'data')
   return 'db> '
 }
 
-// Welcome banner printed once after runRepl(), before the first prompt.
+// Welcome banner printed once after repl(), before the first prompt.
 export function bannerRepl(args) {
   return `Connected to ${args.db} — type /exit to quit`
 }
@@ -196,7 +196,7 @@ For the lifecycle contract:
 ```bash
 crunes -p docs run        # run(args) export and args structure
 crunes -p docs args       # args(builder) export
-crunes -p docs run-repl   # run-repl lifecycle: runRepl, inputRepl, bannerRepl, etc.
+crunes -p docs repl       # repl lifecycle: repl, inputRepl, bannerRepl, etc.
 crunes -p docs args-repl  # argsRepl(builder) export
 ```
 
@@ -305,14 +305,14 @@ return null
       "description": "Public API endpoints and their signatures",
       "permissions": {
         "run": { "allow": ["fs.read:./**"] },
-        "runRepl": { "allow": ["fs.read:./**"] }
+        "repl": { "allow": ["fs.read:./**"] }
       }
     }
   }
 }
 ```
 
-`name` and `description` are shown in `crunes list` and `crunes docs rune`. The `runRepl` permission block is required for `run-repl` mode — it does not inherit from `run`.
+`name` and `description` are shown in `crunes list` and `crunes docs rune`. The `repl` permission block is required for `repl` mode — it does not inherit from `run`.
 
 ## Test the rune
 
@@ -320,7 +320,7 @@ return null
 crunes -p run <key>                    # render output (plain)
 crunes -p run <key> arg1 arg2          # test with args
 crunes -p run <key> --help             # show help section
-crunes -p run-repl <key>               # start interactive REPL session
+crunes -p repl <key>                   # start interactive REPL session
 crunes -p bench <key>                  # check execution time
 crunes -p docs rune <key>              # inspect args schema
 ```

@@ -24,7 +24,7 @@ crunes -p docs rune <key> <key2>          # multiple runes
 ```bash
 crunes -p docs run          # how the run(args) export works and what args contains
 crunes -p docs args         # how to declare the args(builder) export
-crunes -p docs run-repl     # run-repl lifecycle: runRepl, inputRepl, bannerRepl, commandsRepl, etc.
+crunes -p docs repl         # repl lifecycle: repl, inputRepl, bannerRepl, commandsRepl, etc.
 crunes -p docs args-repl    # how to declare the argsRepl(builder) export
 ```
 
@@ -61,4 +61,4 @@ Available on every `crunes` command:
 - **If you want to see a rune's arguments before calling it**: Run `crunes -p docs rune <key>`.
 - **If you need plain output for piping or AI context**: Add the `-p` global flag (e.g. `crunes -p run <key>`).
 - **If you don't know what `utils.ws` or `utils.fs` (etc.) functions look like**: Run `crunes -p docs utils <namespace>` (e.g. `crunes -p docs utils ws`).
-- **If you need to understand the run-repl lifecycle exports**: Run `crunes -p docs run-repl`.
+- **If you need to understand the repl lifecycle exports**: Run `crunes -p docs repl`.
