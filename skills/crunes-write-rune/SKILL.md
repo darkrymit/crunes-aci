@@ -234,14 +234,14 @@ import { shell, section } from '@utils'
 export async function run(args) {
   const limit = args._[0] ? parseInt(args._[0]) : 5
   const controller = new AbortController()
-  const decoder = new TextDecoder()
 
   return new Promise((resolve, reject) => {
     const session = shell.spawn('node counter.js', { signal: controller.signal })
     const lines = []
 
     session.stdout.on('data', (chunk) => {
-      const text = decoder.decode(chunk)
+      // chunk is already a decoded string in text mode (binary: false, the default)
+      const text = chunk
       for (const line of text.split('\n').filter(Boolean)) {
         lines.push(line)
         section.emit(
