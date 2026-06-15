@@ -12,91 +12,86 @@ assert.deepEqual(parseTokens('$100'), [], 'numeric value ignored')
 assert.deepEqual(parseTokens('$docs'), [], 'single dollar not a token')
 assert.deepEqual(
   parseTokens('$$docs'),
-  [{ key: 'docs', rawArgs: '', rawSections: '' }],
+  [{ key: 'docs', rawBracket: '', rawArgs: '' }],
   'bare key'
 )
 assert.deepEqual(
   parseTokens('$$api(v2)'),
-  [{ key: 'api', rawArgs: 'v2', rawSections: '' }],
+  [{ key: 'api', rawBracket: '', rawArgs: 'v2' }],
   'key with args'
 )
 assert.deepEqual(
   parseTokens('$$api()'),
-  [{ key: 'api', rawArgs: '', rawSections: '' }],
+  [{ key: 'api', rawBracket: '', rawArgs: '' }],
   'empty parens treated as no args'
 )
 assert.deepEqual(
   parseTokens('$$api(v2)::endpoints'),
-  [{ key: 'api', rawArgs: 'v2', rawSections: 'endpoints' }],
-  'args + section filter'
+  [{ key: 'api', rawBracket: '', rawArgs: 'v2' }],
+  'legacy :: section syntax is ignored — only args captured'
 )
 assert.deepEqual(
   parseTokens('$$api::endpoints,errors'),
-  [{ key: 'api', rawArgs: '', rawSections: 'endpoints,errors' }],
-  'section filter only, multiple sections'
+  [{ key: 'api', rawBracket: '', rawArgs: '' }],
+  'legacy :: section-only syntax is ignored'
 )
 assert.deepEqual(
   parseTokens('$$search(hello world,src,--count,5)'),
-  [{ key: 'search', rawArgs: 'hello world,src,--count,5', rawSections: '' }],
+  [{ key: 'search', rawBracket: '', rawArgs: 'hello world,src,--count,5' }],
   'space-containing arg captured whole'
 )
 assert.deepEqual(
-  parseTokens('$$docs $$api(v2)::endpoints'),
+  parseTokens('$$docs $$api(v2)'),
   [
-    { key: 'docs', rawArgs: '', rawSections: '' },
-    { key: 'api', rawArgs: 'v2', rawSections: 'endpoints' },
+    { key: 'docs', rawBracket: '', rawArgs: '' },
+    { key: 'api', rawBracket: '', rawArgs: 'v2' },
   ],
   'two tokens'
 )
 assert.deepEqual(
   parseTokens('fetch $$my-plugin:rune-key(arg) for context'),
-  [{ key: 'my-plugin:rune-key', rawArgs: 'arg', rawSections: '' }],
+  [{ key: 'my-plugin:rune-key', rawBracket: '', rawArgs: 'arg' }],
   'plugin-namespaced key'
 )
 assert.deepEqual(
   parseTokens('$$m(foo(bar))'),
-  [{ key: 'm', rawArgs: 'foo(bar)', rawSections: '' }],
+  [{ key: 'm', rawBracket: '', rawArgs: 'foo(bar)' }],
   'nested parentheses'
 )
 assert.deepEqual(
   parseTokens('$$m(foo(bar(baz)))'),
-  [{ key: 'm', rawArgs: 'foo(bar(baz))', rawSections: '' }],
+  [{ key: 'm', rawBracket: '', rawArgs: 'foo(bar(baz))' }],
   'deeply nested parentheses'
 )
 
 // ─── buildCliArgs ─────────────────────────────────────────────────────────────
 
 assert.deepEqual(
-  buildCliArgs([{ key: 'docs', rawArgs: '', rawSections: '' }]),
-  ['run', '--format', 'jsonl', 'docs', '--'],
+  buildCliArgs([{ key: 'docs', rawBracket: '', rawArgs: '' }]),
+  ['run', '--format', 'jsonl', 'docs'],
   'single bare key'
 )
 assert.deepEqual(
-  buildCliArgs([{ key: 'api', rawArgs: 'v2', rawSections: '' }]),
-  ['run', '--format', 'jsonl', 'api', '--', 'v2'],
+  buildCliArgs([{ key: 'api', rawBracket: '', rawArgs: 'v2' }]),
+  ['run', '--format', 'jsonl', 'api', 'v2'],
   'single arg'
 )
 assert.deepEqual(
-  buildCliArgs([{ key: 'api', rawArgs: 'v2', rawSections: 'endpoints' }]),
-  ['run', '--format', 'jsonl', '--section', 'endpoints', 'api', '--', 'v2'],
-  'arg + section filter'
+  buildCliArgs([{ key: 'api', rawBracket: '-s endpoints', rawArgs: 'v2' }]),
+  ['run', '--format', 'jsonl', 'api[-s endpoints]', 'v2'],
+  'bracket flag + arg'
 )
 assert.deepEqual(
-  buildCliArgs([{ key: 'api', rawArgs: '', rawSections: 'endpoints,errors' }]),
-  ['run', '--format', 'jsonl', '--section', 'endpoints,errors', 'api', '--'],
-  'section filter only'
-)
-assert.deepEqual(
-  buildCliArgs([{ key: 'search', rawArgs: 'hello world,src,--count,5', rawSections: '' }]),
-  ['run', '--format', 'jsonl', 'search', '--', 'hello world', 'src', '--count', '5'],
+  buildCliArgs([{ key: 'search', rawBracket: '', rawArgs: 'hello world,src,--count,5' }]),
+  ['run', '--format', 'jsonl', 'search', 'hello world', 'src', '--count', '5'],
   'comma-split args including space-containing value'
 )
 assert.deepEqual(
   buildCliArgs([
-    { key: 'docs', rawArgs: '', rawSections: '' },
-    { key: 'api', rawArgs: 'v2', rawSections: 'endpoints' },
+    { key: 'docs', rawBracket: '', rawArgs: '' },
+    { key: 'api', rawBracket: '', rawArgs: 'v2' },
   ]),
-  ['run', '--format', 'jsonl', '-b', 'docs', '--', '+', '--section', 'endpoints', 'api', '--', 'v2'],
+  ['run', '--format', 'jsonl', '-b', 'docs', '+', 'api', 'v2'],
   'two tokens joined with + and programmatically batched'
 )
 
