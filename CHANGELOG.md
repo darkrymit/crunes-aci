@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] - 2026-06-16
+
+### Added
+- **Batch permission pre-flight**: ACI hook-wrapper now issues a single batch permission check for all plugin rune tokens in a prompt before execution
+- **Auto-test on release**: Test suite runs automatically during `release bump`
+
+### Changed
+- **`run-repl` → `repl`**: Skill docs, hook references, and test fixtures updated for the renamed CLI subcommand and `repl` lifecycle export
+- **Bracket token syntax**: Hook-wrapper updated to `$$key[-s section](args)` syntax; `::section` suffix removed
+- **Skill docs for bracket syntax and new token format**: `crunes-use-rune`, `crunes-write-rune`, `crunes-write-plugin` updated for `v0.7.2+` API (`help` global, `logger`, bracket syntax, new token format)
+- **`check` removed from skill docs**: `crunes-help` troubleshooting and `crunes-write-rune` updated to remove stale `check` command references
+- **README and AGENTS stale syntax fixed**: `::section` token syntax corrected to current format
+
+### Fixed
+- **Hook-wrapper `--` insertion**: Always inserts `--` after the rune key in `buildCliArgs` to protect rune args from being parsed as CLI flags
+- **TextDecoder reference in shell.spawn example**: Removed — `chunk` is already a string in text mode
+- **Hook-wrapper bracket syntax tests**: Updated for the new bracket token format
+
+---
+
 ## [0.7.1] - 2026-06-08
 
 ### Added
