@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.1] - 2026-08-11
+
+### Changed
+- Deprecated. Skills have moved to [crunes-skills](https://github.com/darkrymit/crunes-skills), which installs into Claude Code, Codex, and other agents. The `UserPromptSubmit` hook and `$$key(args)` token injection are discontinued with no replacement.
+
 ## [0.8.0] - 2026-06-16
 
 ### Added

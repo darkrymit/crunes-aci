@@ -1,5 +1,12 @@
 # crunes-aci
 
+> **Deprecated.** This plugin is no longer maintained. Its skills have been rewritten and moved to
+> [crunes-skills](https://github.com/darkrymit/crunes-skills), which installs into Claude Code, Codex,
+> and other agents via `npx skills add darkrymit/crunes-skills`.
+>
+> The `UserPromptSubmit` hook and `$$key(args)` token injection are discontinued and have no replacement.
+> Existing installations continue to work; nothing here has been removed.
+
 ACI (Agentic Coder Interface) integrations for [crunes](https://github.com/darkrymit/context-runes). Connects the [crunes-cli](https://github.com/darkrymit/context-runes-cli) to AI coding tools, providing skills for manual rune access and — where native hook systems are available — automatic context injection.
 
 Currently supported: **Claude Code** (full native integration via `UserPromptSubmit` hook + skills). Other AI tools with skill or prompt-injection support may use the included skills directly against the CLI.
